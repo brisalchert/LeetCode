@@ -11,7 +11,7 @@ package Problem2;
 
 import java.util.Stack;
 
-public class Problem2 {
+public class AddingTwoNumbers {
     public static void main(String[] args) {
         int[] l1 = {9};
         int[] l2 = {1, 9, 9, 9, 9, 9, 9, 9, 9, 9};

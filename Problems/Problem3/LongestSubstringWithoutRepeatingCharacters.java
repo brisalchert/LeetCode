@@ -8,7 +8,7 @@ package Problem3;
 
 import java.util.HashSet;
 
-public class Problem3 {
+public class LongestSubstringWithoutRepeatingCharacters {
     public static void main(String[] args) {
         String input = "abcdefg";
 

@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Arrays;
 import java.util.Map;
 
-public class Problem1 {
+public class TwoSum {
     public static void main(String[] args) {
         int[] nums = {3, 3};
         int target = 6;
