@@ -27,6 +27,12 @@ public class ZigzagConversion {
         System.out.println(convert(input, numRows));
     }
 
+    /**
+     * Converts the input string into a zigzag pattern with the given number of rows
+     * @param s the input string
+     * @param numRows the number of rows
+     * @return the zigzag string read left-to-right line by line
+     */
     public static String convert(String s, int numRows) {
         // Trivial case
         if (numRows == 1) {
