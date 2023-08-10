@@ -20,6 +20,8 @@ public class ReverseInteger {
             return x;
         }
 
+        // Add main algorithm here
+
         return x;
     }
 }
