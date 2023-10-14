@@ -21,6 +21,12 @@ public class RegularExpressionMatching {
         System.out.println(isMatch(expression, pattern));
     }
 
+    /**
+     * Checks if an expression String matches a pattern regular expression String
+     * @param expression the expression String
+     * @param pattern the pattern String
+     * @return true if the expression matches the pattern, false otherwise
+     */
     public static boolean isMatch(String expression, String pattern) {
         // Create memoization table for matches
         memoTable = new Boolean[expression.length() + 1][pattern.length() + 1];
@@ -29,6 +35,14 @@ public class RegularExpressionMatching {
         return checkMatchDP(0, 0, expression, pattern);
     }
 
+    /**
+     * Checks recursively (using DP) whether the characters in the expression match the pattern
+     * @param expressionIndex index in the expression
+     * @param patternIndex index in the pattern
+     * @param expression the expression String
+     * @param pattern the pattern String
+     * @return true if the expression matches the pattern, false otherwise
+     */
     public static boolean checkMatchDP(int expressionIndex, int patternIndex, String expression, String pattern) {
         // Check if memoization table has the result already
         if (memoTable[expressionIndex][patternIndex] != null) {
