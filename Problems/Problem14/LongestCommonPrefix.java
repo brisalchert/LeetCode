@@ -8,6 +8,8 @@
 
 package Problem14;
 
+import java.util.Arrays;
+
 public class LongestCommonPrefix {
     public static void main(String[] args) {
         String[] input = {"flower", "flow", "flight"};
@@ -16,31 +18,18 @@ public class LongestCommonPrefix {
     }
 
     public static String longestCommonPrefix(String[] strs) {
-        String prefix;
+        // Sort the array so we can compare the first and last elements only
+        Arrays.sort(strs);
+        int index = 0;
+        String first = strs[0];
+        String last = strs[strs.length - 1];
 
-        // Store the first string as the prefix
-        prefix = strs[0];
-
-        // Compare first string against the remaining elements
-        for (int index = 1; index < strs.length; index++) {
-            int strIndex = 0;
-
-            // Check each character for a match before incrementing the index
-            while ((strIndex < strs[index].length()) &&
-                    (strIndex < prefix.length()) &&
-                    (prefix.charAt(strIndex) == strs[index].charAt(strIndex))) {
-                strIndex++;
-            }
-
-            // Return early if there is no common prefix, else set the prefix and continue
-            if (strIndex == 0) {
-                return "";
-            }
-            else {
-                prefix = prefix.substring(0, strIndex);
-            }
+        // Increment the index for the prefix as long as characters match
+        while (index < first.length() && index < last.length() && first.charAt(index) == last.charAt(index)) {
+            index++;
         }
 
-        return prefix;
+        // Return the prefix
+        return first.substring(0, index);
     }
 }
