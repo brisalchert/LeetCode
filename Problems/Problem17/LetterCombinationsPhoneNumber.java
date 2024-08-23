@@ -8,72 +8,58 @@
 package Problem17;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class LetterCombinationsPhoneNumber {
     public static void main(String[] args) {
         String digits = "79";
 
+        long start = System.nanoTime();
         System.out.println(letterCombinations(digits));
+        long end = System.nanoTime();
+
+        System.out.println((end - start) / 1000000 + " ms");
     }
 
     public static List<String> letterCombinations(String digits) {
         List<String> result = new ArrayList<>();
 
         // If digits is empty, return an empty list
-        if (digits == null || digits.isEmpty()) {
+        if (digits.isEmpty()) {
             return result;
         }
 
-        // Create a map of digits to their possible letters
-        Map<Character, String> letterMap = getLetterMap();
+        // Create an array of possible letters for the different digits
+        String[] letterMap = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
 
         // Call the recursive helper method
-        letterCombinationHelper(digits, 0, "", result, letterMap);
+        letterCombinationHelper(new StringBuilder(), digits, letterMap, result);
 
         return result;
     }
 
-    private static void letterCombinationHelper(String digits, int digitIndex,
-                                                String combination, List<String> result,
-                                                Map<Character, String> letterMap) {
+    private static void letterCombinationHelper(StringBuilder combination, String remainingDigits,
+                                                String[] letterMap, List<String> result) {
         // Base case: return when a combination is finished, adding it to result
-        if (digitIndex == digits.length()) {
-            result.add(combination);
+        if (remainingDigits.isEmpty()) {
+            result.add(combination.toString());
 
             return;
         }
 
         // Recursive case: add each possible letter for the current digit and continue recursively
-        // for each combination
-        String possibleLetters = letterMap.get(digits.charAt(digitIndex));
+        String possibleLetters = letterMap[remainingDigits.charAt(0) - '2'];
 
-        for (int i = 0; i < possibleLetters.length(); i++) {
-            // Add the current possible letter to the combination
-            combination += possibleLetters.charAt(i);
+        for (char letter : possibleLetters.toCharArray()) {
+            // Append the possible letter to the combination
+            combination.append(letter);
 
-            // Call recursively
-            letterCombinationHelper(digits, digitIndex + 1, combination, result, letterMap);
+            // Call recursively, sub-setting the remaining digits
+            letterCombinationHelper(combination, remainingDigits.substring(1),
+                                    letterMap, result);
 
-            // Remove the last letter from the combination
-            combination = combination.substring(0, combination.length() - 1);
+            // Remove the added letter from the combination
+            combination.deleteCharAt(combination.length() - 1);
         }
-    }
-
-    public static Map<Character, String> getLetterMap() {
-        Map<Character, String> map = new HashMap<>();
-
-        map.put('2', "abc");
-        map.put('3', "def");
-        map.put('4', "ghi");
-        map.put('5', "jkl");
-        map.put('6', "mno");
-        map.put('7', "pqrs");
-        map.put('8', "tuv");
-        map.put('9', "wxyz");
-
-        return map;
     }
 }
