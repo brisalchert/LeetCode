@@ -35,7 +35,7 @@ public class MergeTwoSortedLists {
     public static ListNode mergeTwoLists(ListNode list1, ListNode list2) {
         ListNode current_left = list1;
         ListNode current_right = list2;
-        ListNode result = null;
+        ListNode result;
         ListNode current_result;
 
         // Case for empty lists
@@ -117,8 +117,7 @@ public class MergeTwoSortedLists {
         ListNode current = head;
 
         for (int i = 1; i < arr.length; i++) {
-            ListNode newNode = new ListNode(arr[i]);
-            current.next = newNode;
+            current.next = new ListNode(arr[i]);
             current = current.next;
         }
 
