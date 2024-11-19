@@ -52,12 +52,73 @@ public class MergeKSortedLists {
 
     /**
      * Merges k linked lists of integers, where each list is presorted in ascending order.
+     * Uses recursive algorithm similar to merge sort's divide and conquer
+     * @param lists the list of linked lists
+     * @return the merged list
+     */
+    public static ListNode mergeKLists(ListNode[] lists) {
+        if (lists == null || lists.length == 0) {
+            return null;
+        }
+
+        return mergeKListsHelper(lists, 0, lists.length - 1);
+    }
+
+    private static ListNode mergeKListsHelper(ListNode[] lists, int start, int end) {
+        // Base cases for recursion
+        if (start == end) {
+            return lists[start];
+        }
+
+        if (start + 1 == end) {
+            return merge(lists[start], lists[end]);
+        }
+
+        // Find the midpoint of the lists between start and end
+        int mid = start + (end - start) / 2;
+
+        // Merge the left and right halves recursively
+        ListNode left = mergeKListsHelper(lists, start, mid);
+        ListNode right = mergeKListsHelper(lists, mid + 1, end);
+
+        // Merge the halves together
+        return merge(left, right);
+    }
+
+    private static ListNode merge(ListNode l1, ListNode l2) {
+        // Dummy node for head of merged list
+        ListNode dummy = new ListNode(0);
+        ListNode current = dummy;
+
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                current.next = l1;
+                l1 = l1.next;
+            } else {
+                current.next = l2;
+                l2 = l2.next;
+            }
+
+            current = current.next;
+        }
+
+        if (l1 != null) {
+            current.next = l1;
+        } else {
+            current.next = l2;
+        }
+
+        return dummy.next;
+    }
+
+    /**
+     * Merges k linked lists of integers, where each list is presorted in ascending order.
      * Utilizes a TreeMap to find the previous node in the merged list for each new node
      * by finding the last node with equal or lesser value.
      * @param lists the list of linked lists
      * @return the merged list
      */
-    public static ListNode mergeKLists(ListNode[] lists) {
+    public static ListNode mergeKListsTree(ListNode[] lists) {
         // Case for empty input
         if (lists == null || lists.length == 0) {
             return null;
