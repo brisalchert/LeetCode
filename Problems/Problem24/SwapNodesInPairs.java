@@ -26,6 +26,12 @@ public class SwapNodesInPairs {
         }
     }
 
+    /**
+     * Swaps all consecutive pairs of nodes in a linked list. If there are is an odd number
+     * of nodes, the last node is not swapped.
+     * @param head the head node of the linked list
+     * @return the swapped list
+     */
     public static ListNode swapPairs(ListNode head) {
         // Base case for empty or single-node lists
         if (head == null || head.next == null) {
