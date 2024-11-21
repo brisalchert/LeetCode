@@ -18,11 +18,49 @@ public class SwapNodesInPairs {
         head.next.next = new ListNode(3);
         head.next.next.next = new ListNode(4);
 
-        System.out.println(swapPairs(head));
+        ListNode swapped = swapPairs(head);
+
+        while (swapped != null) {
+            System.out.println(swapped.val);
+            swapped = swapped.next;
+        }
     }
 
     public static ListNode swapPairs(ListNode head) {
-        return null;
+        // Base case for empty or single-node lists
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        // Save a reference to the new list head after swapping
+        ListNode start = head.next;
+
+        // Initialize previous as a dummy node before the head node
+        ListNode previous = new ListNode(0, head);
+
+        while (true) {
+            // Initialize first and second
+            ListNode first = previous.next;
+            ListNode second = first.next;
+
+            // Point previous to second
+            previous.next = second;
+
+            // Point first to second's next pointer
+            first.next = second.next;
+
+            // Point second to first
+            second.next = first;
+
+            // If there are more nodes to swap, increment previous to first's new position
+            if (first.next != null && first.next.next != null) {
+                previous = first;
+            } else {
+                break;
+            }
+        }
+
+        return start;
     }
 
     public static class ListNode {
