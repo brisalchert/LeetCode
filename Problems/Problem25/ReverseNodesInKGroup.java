@@ -59,6 +59,60 @@ public class ReverseNodesInKGroup {
             return head;
         }
 
+        // Create previous, current, and next references
+        ListNode previous = null;
+        ListNode current = head;
+        ListNode next;
+
+        // Reverse the current k-group by iterating through the nodes forwards
+        count = 0;
+        while (count < k) {
+            // Save reference to next node
+            next = current.next;
+
+            // Reverse the current node
+            current.next = previous;
+
+            // Increment the previous and current node references
+            previous = current;
+            current = next;
+
+            // Increment the counter
+            count++;
+        }
+
+        // Recursively reverse the next k-group
+        if (current != null) {
+            // Link the next reversed list to the last node of this k-group
+            head.next = reverseKGroup(current, k);
+        }
+
+        // Return the new head node, which is the last node of the k-group before reversing
+        return previous;
+    }
+
+    public static ListNode reverseKGroupBackwards(ListNode head, int k) {
+        // Base cases for no reversing
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        if (k == 1) {
+            return head;
+        }
+
+        // Check that there are enough nodes to begin with
+        ListNode temp = head;
+        int count = 0;
+        while (temp != null && count < k) {
+            count++;
+            temp = temp.next;
+        }
+
+        if (count < k) {
+            return head;
+        }
+
         // Initialize a dummy node before the head node
         ListNode dummy = new ListNode(0, head);
 
