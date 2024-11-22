@@ -27,6 +27,27 @@ public class RemoveDuplicatesSortedArray {
     }
 
     public static int removeDuplicates(int[] nums) {
-        return 0;
+        // Create an index for the last unique number visited
+        int uniqueIndex = 0;
+
+        // Keep track of the last unique value encountered
+        int lastUnique = nums[0];
+
+        // Iterate through the array, finding and placing the unique values
+        for (int i = 0; i < nums.length; i++) {
+            // Ignore previously encountered values (array is sorted, so values
+            // less than or equal to lastUnique have already been seen)
+            if (nums[i] > lastUnique) {
+                // Set lastUnique to the new unique value
+                lastUnique = nums[i];
+
+                // Increment uniqueIndex and place the new value
+                uniqueIndex++;
+                nums[uniqueIndex] = nums[i];
+            }
+        }
+
+        // Once all elements have been seen, return the count of unique elements
+        return uniqueIndex + 1;
     }
 }
