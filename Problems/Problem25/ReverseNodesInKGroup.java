@@ -38,7 +38,86 @@ public class ReverseNodesInKGroup {
     }
 
     public static ListNode reverseKGroup(ListNode head, int k) {
-        return null;
+        // Base cases for no reversing
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        if (k == 1) {
+            return head;
+        }
+
+        // Check that there are enough nodes to begin with
+        ListNode temp = head;
+        int count = 0;
+        while (temp != null && count < k) {
+            count++;
+            temp = temp.next;
+        }
+
+        if (count < k) {
+            return head;
+        }
+
+        // Initialize a dummy node before the head node
+        ListNode dummy = new ListNode(0, head);
+
+        // Initialize previous to the dummy node
+        ListNode previous = dummy;
+
+        // Initialize current to the head node
+        ListNode current = head;
+
+        while (true) {
+            // Point the previous node to node k
+            ListNode kNode = current;
+            for (int i = 1; i < k; i++) {
+                kNode = kNode.next;
+            }
+
+            previous.next = kNode;
+
+            // Save a reference to the node after the k-group
+            ListNode after = kNode.next;
+
+            // Use recursive helper method to reverse the inner nodes of the k-group
+            reverseGroupHelper(current, 2, k);
+
+            // Point the first node in the k-group to the node after node k
+            current.next = after;
+
+            // If there are more nodes to swap, update pointers and continue
+            int num_remaining = 0;
+
+            while (after != null && num_remaining < k) {
+                num_remaining++;
+                after = after.next;
+            }
+
+            if (num_remaining < k) {
+                break;
+            } else {
+                previous = current;
+                current = previous.next;
+            }
+        }
+
+        return dummy.next;
+    }
+
+    private static void reverseGroupHelper(ListNode previous, int j, int k) {
+        // Base case: reverse the last node in the k-group
+        if (j == k) {
+            // Reverse the current node to point to the previous node
+            previous.next.next = previous;
+
+            return;
+        }
+
+        // Recursive case: reverse further nodes, then reverse this node
+        reverseGroupHelper(previous.next, j + 1, k);
+
+        previous.next.next = previous;
     }
 
     public static class ListNode {
