@@ -29,6 +29,19 @@ public class RemoveElement {
     }
 
     public static int removeElement(int[] nums, int val) {
-        return 0;
+        // Create an index for kept elements
+        int keepIndex = 0;
+
+        // Iterate through the array, removing instances of val and moving kept values
+        for (int i = 0; i < nums.length; i++) {
+            // If the number is not val, keep it and move it to the end of the kept values
+            if (nums[i] != val) {
+                nums[keepIndex] = nums[i];
+                keepIndex++;
+            }
+        }
+
+        // Return the number of kept elements
+        return keepIndex;
     }
 }
