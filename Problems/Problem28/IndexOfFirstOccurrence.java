@@ -27,6 +27,15 @@ public class IndexOfFirstOccurrence {
     }
 
     public static int strStr(String haystack, String needle) {
-        return 0;
+        // Iterate through the haystack String, checking for occurrences of needle
+        for (int i = 0; i <= haystack.length() - needle.length(); i++) {
+            // If the substring from the current index is needle, return the starting index
+            if (needle.equals(haystack.substring(i, i + needle.length()))) {
+                return i;
+            }
+        }
+
+        // If the needle String is not in haystack, return -1
+        return -1;
     }
 }
