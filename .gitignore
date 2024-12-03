@@ -1,3 +1,6 @@
+# IDEA folder XML files
+.idea/*.xml
+
 # Compiled class file
 *.class
 
