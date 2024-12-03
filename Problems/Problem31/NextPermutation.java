@@ -27,13 +27,52 @@ import java.util.Arrays;
 
 public class NextPermutation {
     public static void main(String[] args) {
-        int[] nums = {1, 2, 3};
+        int[] nums = {1, 3, 2, 2};
 
         nextPermutation(nums);
         System.out.println(Arrays.toString(nums));
     }
 
     public static void nextPermutation(int[] nums) {
+        // Initialize index to the farthest right number
+        int index = nums.length - 1;
 
+        // Continue moving right until a number less than the current number
+        // is found (or the array is exhausted)
+        while (index > 0 && nums[index] <= nums[index - 1]) {
+            index--;
+        }
+
+        // If the array is exhausted, sort it in ascending order and return
+        if (index == 0) {
+            Arrays.sort(nums);
+
+            return;
+        }
+
+        // If the index did not move, swap the last two values
+        if (index == nums.length - 1) {
+            swap(nums, index, index - 1);
+
+            return;
+        }
+
+        // Otherwise, sort values from index to the end and then swap the value at
+        // (index - 1) with the first value greater than it
+        Arrays.sort(nums, index, nums.length);
+
+        int swapIndex = index - 1;
+
+        while (nums[swapIndex] >= nums[index]) {
+            index++;
+        }
+
+        swap(nums, index, swapIndex);
+    }
+
+    public static void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 }
