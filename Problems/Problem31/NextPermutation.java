@@ -34,45 +34,46 @@ public class NextPermutation {
     }
 
     public static void nextPermutation(int[] nums) {
-        // Initialize index to the farthest right number
-        int index = nums.length - 1;
+        // Initialize index to the second number from the right
+        int index = nums.length - 2;
 
         // Continue moving right until a number less than the current number
         // is found (or the array is exhausted)
-        while (index > 0 && nums[index] <= nums[index - 1]) {
+        while (index >= 0 && nums[index] >= nums[index + 1]) {
             index--;
         }
 
-        // If the array is exhausted, sort it in ascending order and return
-        if (index == 0) {
-            Arrays.sort(nums);
+        // If the array is not in fully descending order (index > 0), find the smallest
+        // number larger than the number at the index and swap it with index
+        if (index >= 0) {
+            // Start from the right (due to order of permutations)
+            int swapIndex = nums.length - 1;
 
-            return;
+            while(nums[swapIndex] <= nums[index]) {
+                swapIndex--;
+            }
+
+            // Swap the values
+            swap(nums, index, swapIndex);
         }
 
-        // If the index did not move, swap the last two values
-        if (index == nums.length - 1) {
-            swap(nums, index, index - 1);
-
-            return;
-        }
-
-        // Otherwise, sort values from index to the end and then swap the value at
-        // (index - 1) with the first value greater than it
-        Arrays.sort(nums, index, nums.length);
-
-        int swapIndex = index - 1;
-
-        while (nums[swapIndex] >= nums[index]) {
-            index++;
-        }
-
-        swap(nums, index, swapIndex);
+        // Reverse all elements to the right of index
+        reverse(nums, index + 1, nums.length - 1);
     }
 
     public static void swap(int[] nums, int i, int j) {
         int temp = nums[i];
         nums[i] = nums[j];
         nums[j] = temp;
+    }
+
+    public static void reverse(int[] nums, int start, int end) {
+        // Reverse the array by swapping outermost elements and moving inward
+        // until the indices cross
+        while (start < end) {
+            swap(nums, start, end);
+            start++;
+            end--;
+        }
     }
 }
