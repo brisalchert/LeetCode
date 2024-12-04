@@ -28,7 +28,48 @@ public class SearchRotatedSortedArray {
     }
 
     public static int search(int[] nums, int target) {
-        return rotatedBinarySearch(nums, 0, nums.length - 1, target);
+        // Find the index of the smallest value using a binary search
+        int low = 0, high = nums.length - 1;
+
+        while (low < high) {
+            int mid = (low + high) / 2;
+
+            // If high > mid, the smallest value is to the right, else it is to the left
+            if (nums[mid] > nums[high]) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
+        }
+
+        // low == high is the index of the smallest value as well as the number of places
+        // rotated, k
+        int rotated = low;
+
+        // Perform iterative binary search, accounting for the rotation
+        low = 0;
+        high = nums.length - 1;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+
+            // Get the real midpoint by adding the rotation factor
+            int realMid = (mid + rotated) % nums.length;
+
+            if (nums[realMid] == target) {
+                return realMid;
+            }
+
+            // Check if the value is to the right or left
+            if (nums[realMid] < target) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        // If target is not found, return -1
+        return -1;
     }
 
     private static int rotatedBinarySearch(int[] nums, int low, int high, int target) {
