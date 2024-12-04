@@ -28,6 +28,39 @@ public class SearchRotatedSortedArray {
     }
 
     public static int search(int[] nums, int target) {
+        return rotatedBinarySearch(nums, 0, nums.length - 1, target);
+    }
+
+    private static int rotatedBinarySearch(int[] nums, int low, int high, int target) {
+        // Continue while there are items to check
+        if (high >= low) {
+            // Calculate the midpoint index
+            int mid = low + (high - low) / 2;
+
+            // Compare mid to the target
+            if (nums[mid] == target) {
+                return mid;
+            }
+
+            if (nums[mid] < target) {
+                // Check if element should be between mid and high
+                if ((nums[low] > target) || (nums[low] <= nums[mid])) {
+                    return rotatedBinarySearch(nums, mid + 1, high, target);
+                }
+            }
+
+            if (nums[mid] > target) {
+                // Check if element should be between mid and high
+                if ((nums[high] >= target) && (nums[high] < nums[mid])) {
+                    return rotatedBinarySearch(nums, mid + 1, high, target);
+                }
+            }
+
+            // Otherwise, element should be between low and mid
+            return rotatedBinarySearch(nums, low, mid - 1, target);
+        }
+
+        // If element is not found, return -1
         return -1;
     }
 }
