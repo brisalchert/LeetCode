@@ -30,56 +30,49 @@ public class FirstAndLastElement {
     }
 
     public static int[] searchRange(int[] nums, int target) {
-        // Find one instance of target using binary search
+        int[] result = {-1, -1};
+
+        // Return if nums is empty
+        if (nums == null || nums.length == 0) return result;
+
+        // Use binary search to find the lowest index of target
         int low = 0, high = nums.length - 1;
-        int targetIndex = binarySearch(nums, low, high, target);
 
-        // If target was not found, return [-1, -1]
-        if (targetIndex == -1) {
-            return new int[] {-1, -1};
-        }
-
-        // If target was found, all other instances are within range (low, high)
-        int minIndex = targetIndex;
-        int minSearch = targetIndex;
-        int maxIndex = targetIndex;
-        int maxSearch = targetIndex;
-
-        // Continue finding values to the left with binary search
-        while (minIndex > 0 && minSearch != -1) {
-            minSearch = binarySearch(nums, 0, minIndex - 1, target);
-
-            minIndex = (minSearch != -1) ? minSearch : minIndex;
-        }
-
-        // Continue finding values to the right with binary search
-        while (maxIndex < nums.length - 1 && maxSearch != -1) {
-            maxSearch = binarySearch(nums, maxIndex + 1, nums.length - 1, target);
-
-            maxIndex = (maxSearch != -1) ? maxSearch : maxIndex;
-        }
-
-        // Return the min and max indices
-        return new int[] {minIndex, maxIndex};
-    }
-
-    private static int binarySearch(int[] nums, int low, int high, int target) {
-        while (low <= high) {
+        while (low < high) {
             int mid = (low + high) / 2;
 
-            if (nums[mid] == target) {
-                return mid;
-            }
-
+            // Keep moving high index down until low == high
             if (nums[mid] < target) {
                 low = mid + 1;
-            }
-
-            if (nums[mid] > target) {
-                high = mid - 1;
+            } else {
+                high = mid;
             }
         }
 
-        return -1;
+        // Check if the target was not found
+        if (nums[low] != target) {
+            return result;
+        }
+
+        result[0] = low;
+
+        // Use binary search to find the highest index of target
+        high = nums.length - 1;
+
+        while (low < high) {
+            int mid = (low + high) / 2 + 1; // Give mid a right-bias
+
+            // Keep moving high index down until low == high
+            if (nums[mid] > target) {
+                high = mid - 1;
+            } else {
+                low = mid; // Right-bias ensures this does not loop infinitely
+            }
+        }
+
+        result[1] = high;
+
+        // Return the indices
+        return result;
     }
 }
