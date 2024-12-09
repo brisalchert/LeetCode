@@ -15,6 +15,9 @@
 
 package Problem36;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ValidSudoku {
     public static void main(String[] args) {
         char[][] board = {
@@ -33,6 +36,27 @@ public class ValidSudoku {
     }
 
     public static boolean isValidSudoku(char[][] board) {
-        return false;
+        Set<String> seen = new HashSet<>();
+
+        // Iterate through each cell in the board
+        for (int row = 0; row < board.length; row++) {
+            for (int col = 0; col < board[row].length; col++) {
+                char value = board[row][col];
+                int box = ((row / 3) * 3) + (col / 3);
+
+                // Ignore empty cells
+                if (value != '.') {
+                    // Attempt to add the value for the given row, column, and box
+                    if (!seen.add(value + " row " + row) ||
+                        !seen.add(value + " col " + col) ||
+                        !seen.add(value + " box " + box)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        // If all checks pass, return true
+        return true;
     }
 }
