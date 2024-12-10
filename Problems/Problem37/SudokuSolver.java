@@ -38,6 +38,83 @@ public class SudokuSolver {
     }
 
     public static void solveSudoku(char[][] board) {
+        // Call recursive helper function
+        solveHelper(board, 0, 0);
+    }
 
+    public static boolean solveHelper(char[][] board, int row, int col) {
+        // Find the next empty cell
+        while ((row < board.length) && (board[row][col] != '.')) {
+            col++;
+
+            if (col == board[row].length) {
+                row++;
+                col = 0;
+            }
+        }
+
+        // If there are no empty cells left, board is solved
+        if (row == board.length) {
+            return true;
+        }
+
+        // Attempt to fill the current cell and solve recursively
+        for (int num = 1; num <= 9; num++) {
+            char value = String.valueOf(num).charAt(0);
+
+            if (isValid(board, row, col, value)) {
+                board[row][col] = value;
+
+                // Check if that value leads to a solution
+                int newRow = row;
+                int newCol = col + 1;
+
+                if (newCol == board[row].length) {
+                    newRow = row + 1;
+                    newCol = 0;
+                }
+
+                if (solveHelper(board, newRow, newCol)) {
+                    return true;
+                } else {
+                    // Remove invalid value
+                    board[row][col] = '.';
+                }
+            }
+        }
+
+        // If there is no valid solution, return false
+        return false;
+    }
+
+    public static boolean isValid(char[][] board, int row, int col, char value) {
+        // Check if the value is already in the row
+        for (int j = 0; j < board.length; j++) {
+            if (board[row][j] == value) {
+                return false;
+            }
+        }
+
+        // Check if the value is already in the column
+        for (int i = 0; i < board.length; i++) {
+            if (board[i][col] == value) {
+                return false;
+            }
+        }
+
+        // Check if the value is already in the box
+        int startRow = (row / 3) * 3;
+        int startCol = (col / 3) * 3;
+
+        for (int i = startRow; i < startRow + 3; i++) {
+            for (int j = startCol; j < startCol + 3; j++) {
+                if (board[i][j] == value) {
+                    return false;
+                }
+            }
+        }
+
+        // If all checks pass, return true
+        return true;
     }
 }
