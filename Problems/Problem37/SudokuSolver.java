@@ -54,10 +54,10 @@ public class SudokuSolver {
 
                             if (solveHelper(board)) {
                                 return true;
-                            } else {
-                                // Remove invalid value
-                                board[row][col] = '.';
                             }
+
+                            // Remove invalid value
+                            board[row][col] = '.';
                         }
                     }
 
@@ -72,29 +72,14 @@ public class SudokuSolver {
     }
 
     public static boolean isValid(char[][] board, int row, int col, char value) {
-        // Check if the value is already in the row
-        for (int j = 0; j < board.length; j++) {
-            if (board[row][j] == value) {
-                return false;
-            }
-        }
+        int boxRow = (row / 3) * 3;
+        int boxCol = (col / 3) * 3;
 
-        // Check if the value is already in the column
+        // Check if the value is already in the row, box, or column
         for (int i = 0; i < board.length; i++) {
-            if (board[i][col] == value) {
+            if (board[row][i] == value || board[i][col] == value ||
+            board[boxRow + i / 3][boxCol + i % 3] == value) {
                 return false;
-            }
-        }
-
-        // Check if the value is already in the box
-        int startRow = (row / 3) * 3;
-        int startCol = (col / 3) * 3;
-
-        for (int i = startRow; i < startRow + 3; i++) {
-            for (int j = startCol; j < startCol + 3; j++) {
-                if (board[i][j] == value) {
-                    return false;
-                }
             }
         }
 
