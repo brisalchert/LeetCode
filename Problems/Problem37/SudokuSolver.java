@@ -39,52 +39,36 @@ public class SudokuSolver {
 
     public static void solveSudoku(char[][] board) {
         // Call recursive helper function
-        solveHelper(board, 0, 0);
+        solveHelper(board);
     }
 
-    public static boolean solveHelper(char[][] board, int row, int col) {
+    public static boolean solveHelper(char[][] board) {
         // Find the next empty cell
-        while ((row < board.length) && (board[row][col] != '.')) {
-            col++;
+        for (int row = 0; row < board.length; row++) {
+            for (int col = 0; col < board[row].length; col++) {
+                if (board[row][col] == '.') {
+                    // Attempt to fill the current cell and solve recursively
+                    for (char value = '1'; value <= '9'; value++) {
+                        if (isValid(board, row, col, value)) {
+                            board[row][col] = value;
 
-            if (col == board[row].length) {
-                row++;
-                col = 0;
-            }
-        }
+                            if (solveHelper(board)) {
+                                return true;
+                            } else {
+                                // Remove invalid value
+                                board[row][col] = '.';
+                            }
+                        }
+                    }
 
-        // If there are no empty cells left, board is solved
-        if (row == board.length) {
-            return true;
-        }
-
-        // Attempt to fill the current cell and solve recursively
-        for (int num = 1; num <= 9; num++) {
-            char value = String.valueOf(num).charAt(0);
-
-            if (isValid(board, row, col, value)) {
-                board[row][col] = value;
-
-                // Check if that value leads to a solution
-                int newRow = row;
-                int newCol = col + 1;
-
-                if (newCol == board[row].length) {
-                    newRow = row + 1;
-                    newCol = 0;
-                }
-
-                if (solveHelper(board, newRow, newCol)) {
-                    return true;
-                } else {
-                    // Remove invalid value
-                    board[row][col] = '.';
+                    // If no value returns true, current board is invalid
+                    return false;
                 }
             }
         }
 
-        // If there is no valid solution, return false
-        return false;
+        // If there are no more empty cells, board is solved
+        return true;
     }
 
     public static boolean isValid(char[][] board, int row, int col, char value) {
