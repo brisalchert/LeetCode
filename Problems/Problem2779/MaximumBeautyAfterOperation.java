@@ -29,6 +29,8 @@
 
 package Problem2779;
 
+import java.util.Arrays;
+
 public class MaximumBeautyAfterOperation {
     public static void main(String[] args) {
         int[] nums = {4, 6, 1, 2, 7};
@@ -38,6 +40,34 @@ public class MaximumBeautyAfterOperation {
     }
 
     public static int maximumBeauty(int[] nums, int k) {
-        return 0;
+        // If array is empty, return 0
+        if (nums == null || nums.length == 0) return 0;
+
+        // If array has one element, return 1
+        if (nums.length == 1) return 1;
+
+        // Create a sorted copy of the array
+        int[] numsCopy = Arrays.copyOf(nums, nums.length);
+        Arrays.sort(numsCopy);
+
+        // Use a sliding window to find maximum beauty
+        int left = 0, right = 0, maxBeauty = 0;
+
+        while (right < numsCopy.length - 1) {
+            // Increment right index until window has invalid range
+            while ((right < numsCopy.length - 1) && (Math.abs(numsCopy[right + 1] - numsCopy[left]) <= 2 * k)) {
+                right++;
+            }
+
+            // Record beauty of current window
+            maxBeauty = Math.max(maxBeauty, right - left + 1);
+
+            // Move left index until the next window will be valid
+            while ((right < numsCopy.length - 1) && !(Math.abs(numsCopy[right + 1] - numsCopy[left]) <= 2 * k)) {
+                left++;
+            }
+        }
+
+        return maxBeauty;
     }
 }
