@@ -66,8 +66,7 @@ public class CombinationSum {
             current.add(candidates[i]);
 
             // Call recursively with new diff to find new unique combinations
-            int newDiff = diff - candidates[i];
-            combinationHelper(candidates, newDiff, result, current, i); // Use i to allow reusing elements
+            combinationHelper(candidates, diff - candidates[i], result, current, i); // Use i to allow reusing elements
 
             // Remove the current element from the current combination
             current.remove(current.size() - 1);
