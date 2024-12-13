@@ -27,10 +27,37 @@ package Problem38;
 
 public class CountAndSay {
     public static void main(String[] args) {
+        int n = 4;
 
+        System.out.println(countAndSay(n));
     }
 
-    public static int countAndSay(int n) {
-        return 0;
+    public static String countAndSay(int n) {
+        if (n == 1) return "1";
+
+        // Get previous result
+        String prev = countAndSay(n - 1);
+        StringBuilder result = new StringBuilder();
+
+        // Iterate through the characters in the previous result
+        int index = 0;
+
+        while (index < prev.length()) {
+            char current = prev.charAt(index);
+            int count = 1;
+
+            // Count how many times the current character appears
+            while ((index < prev.length() - 1) && (prev.charAt(index + 1) == current)) {
+                count++;
+                index++;
+            }
+
+            // Add the RLE to the result
+            result.append(count);
+            result.append(current);
+            index++;
+        }
+
+        return result.toString();
     }
 }
