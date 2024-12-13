@@ -27,7 +27,7 @@ package Problem38;
 
 public class CountAndSay {
     public static void main(String[] args) {
-        int n = 4;
+        int n = 5;
 
         System.out.println(countAndSay(n));
     }
@@ -59,5 +59,36 @@ public class CountAndSay {
         }
 
         return result.toString();
+    }
+
+    public static String countAndSayIterative(int n) {
+        String result = "1";
+
+        // Iterate through each result up to n
+        for (int i = 2; i <= n; i++) {
+            StringBuilder temp = new StringBuilder();
+            int index = 0;
+
+            // Iterate through the previous result
+            while (index < result.length()) {
+                char current = result.charAt(index);
+                int count = 1;
+
+                while ((index < result.length() - 1) && result.charAt(index + 1) == current) {
+                    count++;
+                    index++;
+                }
+
+                // Add the current RLE to the temp String
+                temp.append(count);
+                temp.append(current);
+                index++;
+            }
+
+            // Set the new result String
+            result = temp.toString();
+        }
+
+        return result;
     }
 }
