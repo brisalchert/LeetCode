@@ -25,20 +25,78 @@
 
 package Problem1792;
 
+import java.util.PriorityQueue;
+
 public class MaximumAveragePassRatio {
     public static void main(String[] args) {
         int[][] classes = {
-                {1, 2},
-                {3, 5},
-                {2, 2}
+                {2, 4},
+                {3, 9},
+                {4, 5},
+                {2, 10}
         };
 
-        int extraStudents = 2;
+        int extraStudents = 4;
 
         System.out.println(maxAverageRatio(classes, extraStudents));
     }
 
     public static double maxAverageRatio(int[][] classes, int extraStudents) {
-        return 0.0;
+        PriorityQueue<ClassStats> classHeap = new PriorityQueue<>();
+        ClassStats classStats;
+
+        // Calculate extra student impact for each class
+        for (int[] currentClass : classes) {
+            // Create object for comparing classes by highest impact of adding an extra student
+            classStats = new ClassStats(currentClass[0], currentClass[1]);
+            classHeap.add(classStats);
+        }
+
+        // While there are extra students, add them to the class with the greatest impact
+        while (extraStudents > 0) {
+            classHeap.add(classHeap.remove().addExtraStudent());
+            extraStudents--;
+        }
+
+        // Calculate average pass ratio for all classes
+        double sum = 0.0;
+
+        while (!classHeap.isEmpty()) {
+            classStats = classHeap.remove();
+            sum += ((double) classStats.pass / classStats.total);
+        }
+
+        return sum / classes.length;
+    }
+
+    public static class ClassStats implements Comparable<ClassStats> {
+        public int pass;
+        public int total;
+        public double impact;
+
+        public ClassStats(int pass, int total) {
+            this.pass = pass;
+            this.total = total;
+            calculateImpact();
+        }
+
+        public ClassStats addExtraStudent() {
+            this.pass++;
+            this.total++;
+            calculateImpact();
+
+            return this;
+        }
+
+        // Calculate impact using simplified formula of (improved ratio - original ratio)
+        public void calculateImpact() {
+            this.impact = ((double) total - pass) / (total * (total + 1.0));
+        }
+
+        @Override
+        public int compareTo(ClassStats other) {
+            // Multiply by -1 to reverse the comparator for min heap
+            return -1 * Double.compare(this.impact, other.impact);
+        }
     }
 }
