@@ -21,6 +21,35 @@ public class FirstMissingPositive {
     }
 
     public static int firstMissingPositive(int[] nums) {
-        return 1;
+        // First iteration: swap non-duplicate positives (within output range) to their "correct" locations
+        int index = 0;
+
+        while (index < nums.length) {
+            if (0 < nums[index] && nums[index] <= nums.length) {
+                int value = nums[index];
+
+                // Check if non-duplicate
+                if (nums[value - 1] != value) {
+                    // Swap values
+                    int temp = nums[value - 1];
+                    nums[value - 1] = value;
+                    nums[index] = temp;
+                    continue;
+                }
+            }
+
+            // Only increment index if no swap was made
+            index++;
+        }
+
+        // Second iteration: find first missing positive
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != i + 1) {
+                return i + 1;
+            }
+        }
+
+        // If no positives are missing, return the next positive
+        return nums.length + 1;
     }
 }
