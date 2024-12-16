@@ -19,7 +19,6 @@
 package Problem3264;
 
 import java.util.Arrays;
-import java.util.PriorityQueue;
 
 public class ArrayStateAfterMultiplication {
     public static void main(String[] args) {
@@ -31,44 +30,25 @@ public class ArrayStateAfterMultiplication {
     }
 
     public static int[] getFinalState(int[] nums, int k, int multiplier) {
-        PriorityQueue<NumRecord> numPQ = new PriorityQueue<>();
-
-        // Put all values in nums into a min heap
-        for (int i = 0; i < nums.length; i++) {
-            NumRecord record = new NumRecord(nums[i], i);
-            numPQ.offer(record);
-        }
-
-        // For each operation, multiply the minimum element and put it back on the heap
         for (int i = 0; i < k; i++) {
-            NumRecord record = numPQ.remove();
-            record.num *= multiplier;
-            nums[record.index] = record.num;
-            numPQ.offer(record);
+            int minIndex = getMinIndex(nums);
+            nums[minIndex] *= multiplier;
         }
 
         return nums;
     }
 
-    static class NumRecord implements Comparable<NumRecord> {
-        public int num;
-        public int index;
+    public static int getMinIndex(int[] nums) {
+        int min = Integer.MAX_VALUE;
+        int minIndex = 0;
 
-        public NumRecord(int num, int index) {
-            this.num = num;
-            this.index = index;
-        }
-
-        @Override
-        public int compareTo(NumRecord other) {
-            int result = Integer.compare(this.num, other.num);
-
-            // Use index for comparison in the case of equal values
-            if (result == 0) {
-                result = Integer.compare(this.index, other.index);
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] < min) {
+                min = nums[i];
+                minIndex = i;
             }
-
-            return result;
         }
+
+        return minIndex;
     }
 }
