@@ -27,6 +27,19 @@ public class MaxChunksToSort {
     }
 
     public static int maxChunksToSorted(int[] arr) {
-        return 0;
+        int max = arr[0];
+        int chunks = 0;
+
+        // A valid chunk ends when the current maximum value
+        // is equal to the current index
+        for (int i = 0; i < arr.length; i++) {
+            max = Math.max(max, arr[i]);
+
+            if (max == i) {
+                chunks++;
+            }
+        }
+
+        return chunks;
     }
 }
