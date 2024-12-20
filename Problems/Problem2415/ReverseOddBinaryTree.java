@@ -33,14 +33,34 @@ public class ReverseOddBinaryTree {
         TreeNode root = createBinaryTree(input, 0);
 
         // Reverse odd levels
-        // root = reverseOddLevels(root);
+         root = reverseOddLevels(root);
 
         // Print new tree
         printTree(root);
     }
 
     public static TreeNode reverseOddLevels(TreeNode root) {
-        return null;
+        symmetricLevelTraversal(root.left, root.right, 1);
+
+        return root;
+    }
+
+    private static void symmetricLevelTraversal(TreeNode leftSubtree, TreeNode rightSubtree, int level) {
+        if (leftSubtree == null || rightSubtree == null) {
+            return;
+        }
+
+        // If the current level is odd
+        if (level % 2 == 1 ) {
+            // Swap symmetric node values
+            int temp = leftSubtree.val;
+            leftSubtree.val = rightSubtree.val;
+            rightSubtree.val = temp;
+        }
+
+        // Call recursively for child node symmetric pairs
+        symmetricLevelTraversal(leftSubtree.left, rightSubtree.right, level + 1);
+        symmetricLevelTraversal(leftSubtree.right, rightSubtree.left, level + 1);
     }
 
     /**
