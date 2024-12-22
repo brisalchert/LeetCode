@@ -25,6 +25,48 @@ public class TrappingRainWater {
     }
 
     public static int trap(int[] height) {
-        return 0;
+        int trapped = 0;
+
+        // Create indices for the left and right walls of the current
+        // water container, as well as the current max right height
+        int leftIndex = 0;
+        int rightIndex = 1;
+        int maxRightIndex = 1;
+
+        // Find instances where right wall height matches or exceeds
+        // left wall height
+        while (leftIndex < height.length) {
+            // If right wall shorter than left wall, calculate trapped water
+            if (rightIndex == height.length) {
+                for (int i = leftIndex + 1; i < maxRightIndex; i++) {
+                    trapped += height[maxRightIndex] - height[i];
+                }
+
+                // Set new left wall and begin search for new right wall
+                leftIndex = maxRightIndex;
+                rightIndex = leftIndex + 1;
+                maxRightIndex = rightIndex;
+            } else if (height[rightIndex] >= height[leftIndex]) {
+                // If left wall shorter than right wall, calculate trapped water
+                for (int i = leftIndex + 1; i < rightIndex; i++) {
+                    trapped += height[leftIndex] - height[i];
+                }
+
+                // Set new left wall and begin search for new right wall
+                leftIndex = rightIndex;
+                rightIndex++;
+                maxRightIndex = rightIndex;
+            } else {
+                // Set new max right height
+                if (height[rightIndex] >= height[maxRightIndex]) {
+                    maxRightIndex = rightIndex;
+                }
+
+                // Keep searching for right wall
+                rightIndex++;
+            }
+        }
+
+        return trapped;
     }
 }
