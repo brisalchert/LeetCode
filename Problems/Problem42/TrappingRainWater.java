@@ -27,43 +27,33 @@ public class TrappingRainWater {
     public static int trap(int[] height) {
         int trapped = 0;
 
-        // Create indices for the left and right walls of the current
-        // water container, as well as the current max right height
-        int leftIndex = 0;
-        int rightIndex = 1;
-        int maxRightIndex = 1;
+        // Create left and right pointers and track max left and right heights
+        int left = 0, right = height.length - 1;
+        int leftMax = 0, rightMax = 0;
 
-        // Find instances where right wall height matches or exceeds
-        // left wall height
-        while (leftIndex < height.length) {
-            // If right wall shorter than left wall, calculate trapped water
-            if (rightIndex == height.length) {
-                for (int i = leftIndex + 1; i < maxRightIndex; i++) {
-                    trapped += height[maxRightIndex] - height[i];
+        while (left <= right) {
+            if (height[left] <= height[right]) {
+                // Check for new left max
+                if (height[left] > leftMax) {
+                    leftMax = height[left];
+                } else {
+                    // Add trapped water
+                    trapped += leftMax - height[left];
                 }
 
-                // Set new left wall and begin search for new right wall
-                leftIndex = maxRightIndex;
-                rightIndex = leftIndex + 1;
-                maxRightIndex = rightIndex;
-            } else if (height[rightIndex] >= height[leftIndex]) {
-                // If left wall shorter than right wall, calculate trapped water
-                for (int i = leftIndex + 1; i < rightIndex; i++) {
-                    trapped += height[leftIndex] - height[i];
-                }
-
-                // Set new left wall and begin search for new right wall
-                leftIndex = rightIndex;
-                rightIndex++;
-                maxRightIndex = rightIndex;
+               // Increment left pointer
+                left++;
             } else {
-                // Set new max right height
-                if (height[rightIndex] >= height[maxRightIndex]) {
-                    maxRightIndex = rightIndex;
+                // Check for new right max
+                if (height[right] > rightMax) {
+                    rightMax = height[right];
+                } else {
+                    // Add trapped water
+                    trapped += rightMax - height[right];
                 }
 
-                // Keep searching for right wall
-                rightIndex++;
+                // Decrement right pointer
+                right--;
             }
         }
 
