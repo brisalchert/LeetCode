@@ -29,32 +29,21 @@ public class JumpGame2 {
     }
 
     public static int jump(int[] nums) {
-        int index = 0;
-        int count = 0;
+        int jumps = 0;
+        int currentJumpMax = 0;
+        int maxReachable = 0;
 
-        while (index < nums.length - 1) {
-            int maxReachable = index + nums[index];
-            int targetJump = index + nums[index];
+        for (int i = 0; i < nums.length - 1; i++) {
+            // Calculate the furthest reachable point for each index
+            maxReachable = Math.max(maxReachable, i + nums[i]);
 
-            // If end is reachable, jump to it
-            if (maxReachable >= nums.length - 1) {
-                index = nums.length - 1;
-                count++;
-                continue;
+            // Take the next jump once all options have been seen
+            if (i == currentJumpMax) {
+                currentJumpMax = maxReachable;
+                jumps++;
             }
-
-            // Find the furthest reaching jump
-            for (int j = index + 1; (j < nums.length && j <= index + nums[index]); j++) {
-                if (j + nums[j] > maxReachable) {
-                    maxReachable = j + nums[j];
-                    targetJump = j;
-                }
-            }
-
-            index = targetJump;
-            count++;
         }
 
-        return count;
+        return jumps;
     }
 }
