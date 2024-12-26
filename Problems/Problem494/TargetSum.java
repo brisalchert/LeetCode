@@ -33,6 +33,17 @@ public class TargetSum {
     }
 
     public static int findTargetSumWays(int[] nums, int target) {
-        return 0;
+        return findTargetHelper(nums, target, 0, 0);
+    }
+
+    private static int findTargetHelper(int[] nums, int target, int index, int sum) {
+        if (index == nums.length) {
+            return sum == target ? 1 : 0;
+        }
+
+        int positive = findTargetHelper(nums, target, index + 1, sum + nums[index]);
+        int negative = findTargetHelper(nums, target, index + 1, sum - nums[index]);
+
+        return positive + negative;
     }
 }
