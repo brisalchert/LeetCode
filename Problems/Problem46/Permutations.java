@@ -11,6 +11,7 @@
 
 package Problem46;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Permutations {
@@ -21,6 +22,28 @@ public class Permutations {
     }
 
     public static List<List<Integer>> permute(int[] nums) {
-        return null;
+        List<List<Integer>> result = new ArrayList<>();
+
+        permuteHelper(nums, new ArrayList<>(), result);
+
+        return result;
+    }
+
+    private static void permuteHelper(int[] nums, List<Integer> permutation, List<List<Integer>> result) {
+        // Base case: if permutation is complete, add it to the output
+        if (permutation.size() == nums.length) {
+            result.add(new ArrayList<>(permutation));
+
+            return;
+        }
+
+        // Recursive case: Try each remaining value and get further permutations
+        for (int num : nums) {
+            if (!permutation.contains(num)) {
+                permutation.add(num);
+                permuteHelper(nums, permutation, result);
+                permutation.remove(permutation.size() - 1);
+            }
+        }
     }
 }
