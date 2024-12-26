@@ -24,26 +24,36 @@ public class Permutations {
     public static List<List<Integer>> permute(int[] nums) {
         List<List<Integer>> result = new ArrayList<>();
 
-        permuteHelper(nums, new ArrayList<>(), result);
+        permuteHelper(nums, 0, result);
 
         return result;
     }
 
-    private static void permuteHelper(int[] nums, List<Integer> permutation, List<List<Integer>> result) {
+    private static void permuteHelper(int[] nums, int startIndex, List<List<Integer>> result) {
         // Base case: if permutation is complete, add it to the output
-        if (permutation.size() == nums.length) {
-            result.add(new ArrayList<>(permutation));
+        if (startIndex == nums.length) {
+            List<Integer> permutation = new ArrayList<>();
+
+            for (int num : nums) {
+                permutation.add(num);
+            }
+
+            result.add(permutation);
 
             return;
         }
 
-        // Recursive case: Try each remaining value and get further permutations
-        for (int num : nums) {
-            if (!permutation.contains(num)) {
-                permutation.add(num);
-                permuteHelper(nums, permutation, result);
-                permutation.remove(permutation.size() - 1);
-            }
+        // Recursive case: put each remaining value at startIndex and call recursively
+        for (int i = startIndex; i < nums.length; i++) {
+            swap(nums, startIndex, i);
+            permuteHelper(nums, startIndex + 1, result);
+            swap(nums, startIndex, i);
         }
+    }
+
+    private static void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 }
