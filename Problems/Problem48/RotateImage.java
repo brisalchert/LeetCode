@@ -18,9 +18,10 @@ import java.util.Arrays;
 public class RotateImage {
     public static void main(String[] args) {
         int[][] matrix = {
-                {1, 2, 3},
-                {4, 5, 6},
-                {7, 8, 9}
+                {5, 1, 9, 11},
+                {2, 4, 8, 10},
+                {13, 3, 6, 7},
+                {15, 14, 12, 16}
         };
 
         rotate(matrix);
@@ -33,6 +34,20 @@ public class RotateImage {
     public static void rotate(int[][] matrix) {
         if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
             return;
+        }
+
+        int numLevels = matrix.length / 2;
+        int length = matrix.length;
+
+        for (int level = 0; level < numLevels; level++) {
+            for (int i = level; i < (length - 1 - level); i++) {
+                // Swap four indices at a time
+                int temp = matrix[level][i];
+                matrix[level][i] = matrix[length - 1 - i][level];
+                matrix[length - 1 - i][level] = matrix[length - 1 - level][length - 1 - i];
+                matrix[length - 1 - level][length - 1 - i] = matrix[i][length - 1 - level];
+                matrix[i][length - 1 - level] = temp;
+            }
         }
     }
 }
