@@ -25,57 +25,42 @@
 
 package Problem2466;
 
-import java.util.Arrays;
-
 public class CountWaysBuildStrings {
     public static void main(String[] args) {
-        int low = 200, high = 200, zero = 10, one = 1;
+        int low = 3, high = 8, zero = 2, one = 3;
 
         System.out.println(countGoodStrings(low, high, zero, one));
     }
 
     public static int countGoodStrings(int low, int high, int zero, int one) {
-        long result = 0;
+        // Ensure zero <= one (because of order of if statements)
+        if (zero > one) {
+            return countGoodStrings(low, high, one, zero);
+        }
 
-        // Get counts of all lengths from low to high (inclusive)
+        int mod = (int) (1e9 + 7);
+
         int[] counts = new int[high + 1];
-        Arrays.fill(counts, -1);
-        for (int i = low; i <= high; i++) {
-            result += count(i, counts, zero, one);
+        counts[0] = 1;
+        int result = 0;
+
+        for (int n = 1; n <= high; n++) {
+            // Check if adding "zero" characters is valid
+            if (n >= zero) {
+                counts[n] = (counts[n] + counts[n - zero]) % mod;
+            }
+
+            // Check if adding "one" characters is valid
+            if (n >= one) {
+                counts[n] = (counts[n] + counts[n - one]) % mod;
+            }
+
+            // Add all counts from low - high (inclusive) to result
+            if (n >= low) {
+                result = (result + counts[n]) % mod;
+            }
         }
 
-        return (int) (result % (1e9 + 7));
-    }
-
-    private static int count(int n, int[] counts, int zero, int one) {
-        if (n == 0) {
-            return 0;
-        }
-
-        if (counts[n] != -1) {
-            return counts[n];
-        }
-
-        long count = 0;
-
-        if (n == zero) {
-            count += 1;
-        }
-
-        if (n == one) {
-            count += 1;
-        }
-
-        if (n > zero) {
-            count += count(n - zero, counts, zero, one);
-        }
-
-        if (n > one) {
-            count += count(n - one, counts, zero, one);
-        }
-
-        counts[n] = (int) (count % (1e9 + 7));
-
-        return counts[n];
+        return result;
     }
 }
