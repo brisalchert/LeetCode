@@ -25,14 +25,57 @@
 
 package Problem2466;
 
+import java.util.Arrays;
+
 public class CountWaysBuildStrings {
     public static void main(String[] args) {
-        int low = 3, high = 3, zero = 1, one = 1;
+        int low = 200, high = 200, zero = 10, one = 1;
 
         System.out.println(countGoodStrings(low, high, zero, one));
     }
 
     public static int countGoodStrings(int low, int high, int zero, int one) {
-        return 0;
+        long result = 0;
+
+        // Get counts of all lengths from low to high (inclusive)
+        int[] counts = new int[high + 1];
+        Arrays.fill(counts, -1);
+        for (int i = low; i <= high; i++) {
+            result += count(i, counts, zero, one);
+        }
+
+        return (int) (result % (1e9 + 7));
+    }
+
+    private static int count(int n, int[] counts, int zero, int one) {
+        if (n == 0) {
+            return 0;
+        }
+
+        if (counts[n] != -1) {
+            return counts[n];
+        }
+
+        long count = 0;
+
+        if (n == zero) {
+            count += 1;
+        }
+
+        if (n == one) {
+            count += 1;
+        }
+
+        if (n > zero) {
+            count += count(n - zero, counts, zero, one);
+        }
+
+        if (n > one) {
+            count += count(n - one, counts, zero, one);
+        }
+
+        counts[n] = (int) (count % (1e9 + 7));
+
+        return counts[n];
     }
 }
