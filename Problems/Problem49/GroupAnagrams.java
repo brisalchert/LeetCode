@@ -14,7 +14,7 @@
 
 package Problem49;
 
-import java.util.List;
+import java.util.*;
 
 public class GroupAnagrams {
     public static void main(String[] args) {
@@ -28,6 +28,22 @@ public class GroupAnagrams {
     }
 
     public static List<List<String>> groupAnagrams(String[] strs) {
-        return null;
+        Map<String, List<String>> anagramMap = new HashMap<>();
+
+        for (String s : strs) {
+            // Create new string with sorted characters
+            char[] chars = s.toCharArray();
+            Arrays.sort(chars);
+            String sorted = new String(chars);
+
+            // Add anagram to its corresponding list
+            if (!anagramMap.containsKey(sorted)) {
+                anagramMap.put(sorted, new ArrayList<>());
+            }
+
+            anagramMap.get(sorted).add(s);
+        }
+
+        return new ArrayList<>(anagramMap.values());
     }
 }
