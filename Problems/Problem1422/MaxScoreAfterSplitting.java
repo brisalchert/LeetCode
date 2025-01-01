@@ -29,6 +29,31 @@ public class MaxScoreAfterSplitting {
     }
 
     public static int maxScore(String s) {
-        return 0;
+        int zerosCount = 0;
+        int onesCount = 0;
+        int totalOnes = 0;
+        int bestScore = Integer.MIN_VALUE;
+
+        // Get totalOnes for whole string
+        for (char c : s.toCharArray()) {
+            if (c == '1') {
+                totalOnes++;
+            }
+        }
+
+        // Get scores for all splits of non-empty substrings
+        for (int i = 0; i < s.length() - 1; i++) {
+            if (s.charAt(i) == '0') {
+                zerosCount++;
+            } else {
+                onesCount++;
+            }
+
+            // Calculate score
+            int score = (zerosCount + (totalOnes - onesCount));
+            bestScore = Math.max(bestScore, score);
+        }
+
+        return bestScore;
     }
 }
