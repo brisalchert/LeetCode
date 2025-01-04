@@ -23,6 +23,7 @@
 
 package Problem1930;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,34 +35,32 @@ public class UniqueLen3Palindrome {
     }
 
     public static int countPalindromicSubsequence(String s) {
-        Set<Character> letters = new HashSet<>();
-
-        for (char c : s.toCharArray()) {
-            letters.add(c);
-        }
-
+        int[] first = new int[26];
+        int[] last = new int[26];
+        Arrays.fill(first, -1);
         int result = 0;
 
-        // Find first and last occurrence of each letter
-        for (char letter : letters) {
-            int i = -1;
-            int j = 0;
+        // Get first and last indices of each letter of the alphabet
+        for (int i = 0; i < s.length(); i++) {
+            int alphaIndex = s.charAt(i) - 'a';
 
-            for (int k = 0; k < s.length(); k++) {
-                if (s.charAt(k) == letter) {
-                    if (i == -1) {
-                        i = k;
-                    }
-
-                    j = k;
-                }
+            if (first[alphaIndex] == -1) {
+                first[alphaIndex] = i;
             }
 
-            // Create a set of all palindromes for the current letter
+            last[alphaIndex] = i;
+        }
+
+        // Get count of unique palindromes for each letter present in s
+        for (int i = 0; i < 26; i++) {
+            if (first[i] == -1) {
+                continue;
+            }
+
             Set<Character> uniquePalindromes = new HashSet<>();
 
-            for (int k = i + 1; k < j; k++) {
-                uniquePalindromes.add(s.charAt(k));
+            for (int j = first[i] + 1; j < last[i]; j++) {
+                uniquePalindromes.add(s.charAt(j));
             }
 
             result += uniquePalindromes.size();
