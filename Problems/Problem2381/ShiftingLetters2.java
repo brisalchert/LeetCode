@@ -34,6 +34,40 @@ public class ShiftingLetters2 {
     }
 
     public static String shiftingLetters(String s, int[][] shifts) {
-        return null;
+        int[] diff = new int[s.length() + 1];
+        int[] charShifts = new int[s.length()];
+
+        // Update start and ending (exclusive) indices for each shift
+        for (int[] shift : shifts) {
+            int start = shift[0], end = shift[1], direction = shift[2];
+            int value = (direction == 1 ? 1 : -1);
+
+            diff[start] += value;
+            diff[end + 1] -= value;
+        }
+
+        int cumulativeShift = 0;
+
+        // Calculate cumulative shift for each character index
+        for (int i = 0; i < s.length(); i++) {
+            cumulativeShift += diff[i];
+            charShifts[i] = cumulativeShift;
+        }
+
+        char[] sArray = s.toCharArray();
+
+        // Apply character shifts
+        for (int i = 0; i < s.length(); i++) {
+            int shift = (sArray[i] - 'a' + charShifts[i]) % 26;
+
+            // Correct for negative shift
+            if (shift < 0) {
+                shift += 26;
+            }
+
+            sArray[i] = (char) ('a' + shift);
+        }
+
+        return new String(sArray);
     }
 }
