@@ -21,7 +21,7 @@ public class LengthLastWord {
     }
 
     public static int lengthOfLastWord(String s) {
-        int right = -1;
+        int right;
         int left = s.length() - 1;
 
         // Find last non-space character
