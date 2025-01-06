@@ -28,12 +28,39 @@ import java.util.Arrays;
 
 public class MinimumOperationsMove {
     public static void main(String[] args) {
-        String boxes = "110";
+        String boxes = "001011";
 
         System.out.println(Arrays.toString(minOperations(boxes)));
     }
 
     public static int[] minOperations(String boxes) {
-        return null;
+        int[] result = new int[boxes.length()];
+        int prefixCount = 0;
+        int prefixSum = 0;
+
+        // Prefix traversal for balls to the left
+        for (int i = 0; i < boxes.length(); i++) {
+            result[i] += (prefixCount * i - prefixSum);
+
+            if (boxes.charAt(i) == '1') {
+                prefixCount++;
+                prefixSum += i;
+            }
+        }
+
+        int suffixCount = 0;
+        int suffixSum = 0;
+
+        // Suffix traversal for balls to the right
+        for (int i = boxes.length() - 1; i >= 0; i--) {
+            result[i] += (suffixSum - suffixCount * i);
+
+            if (boxes.charAt(i) == '1') {
+                suffixCount++;
+                suffixSum += i;
+            }
+        }
+
+        return result;
     }
 }
