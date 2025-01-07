@@ -16,6 +16,7 @@
 
 package Problem1408;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StringMatchingInArray {
@@ -26,6 +27,71 @@ public class StringMatchingInArray {
     }
 
     public static List<String> stringMatching(String[] words) {
-        return null;
+        List<String> result = new ArrayList<>();
+
+        for (int i = 0; i < words.length; i++) {
+            for (int j = 0; j < words.length; j++) {
+                if (i != j && words[i].length() <= words[j].length()) {
+                    if (search(words[i], words[j])) {
+                        result.add(words[i]);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private static void constructLPS(String pat, int[] lps) {
+        int len = 0;
+        lps[0] = 0;
+
+        int i = 1;
+
+        while (i < pat.length()) {
+            if (pat.charAt(i) == pat.charAt(len)) {
+                len++;
+                lps[i] = len;
+                i++;
+            } else {
+                if (len != 0) {
+                    len = lps[len - 1];
+                } else {
+                    lps[i] = 0;
+                    i++;
+                }
+            }
+        }
+    }
+
+    private static boolean search(String pat, String word) {
+        int n = word.length();
+        int m = pat.length();
+
+        int[] lps = new int[m];
+        constructLPS(pat, lps);
+
+        int i = 0;
+        int j = 0;
+
+        while (i < n) {
+            if (word.charAt(i) == pat.charAt(j)) {
+                i++;
+                j++;
+
+                if (j == m) {
+                    return true;
+                }
+            } else {
+                if (j != 0) {
+                    j = lps[j - 1];
+                } else {
+                    i++;
+                }
+            }
+        }
+
+        return false;
     }
 }
