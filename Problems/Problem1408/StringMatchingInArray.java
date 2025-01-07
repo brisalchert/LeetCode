@@ -16,12 +16,11 @@
 
 package Problem1408;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class StringMatchingInArray {
     public static void main(String[] args) {
-        String[] words = {"mass", "as", "hero", "superhero"};
+        String[] words = {"mass", "as", "hero", "heroes", "superhero"};
 
         System.out.println(stringMatching(words));
     }
@@ -31,11 +30,27 @@ public class StringMatchingInArray {
 
         for (int i = 0; i < words.length; i++) {
             for (int j = 0; j < words.length; j++) {
-                if (i != j && words[i].length() <= words[j].length()) {
-                    if (search(words[i], words[j])) {
-                        result.add(words[i]);
-                        break;
-                    }
+                if (i != j && words[j].contains(words[i])) {
+                    result.add(words[i]);
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public static List<String> stringMatchingKMP(String[] words) {
+        // Sort by length in ascending order
+        Arrays.sort(words, Comparator.comparingInt(String::length));
+
+        List<String> result = new ArrayList<>();
+
+        for (int i = 0; i < words.length; i++) {
+            for (int j = i + 1; j < words.length; j++) {
+                if (search(words[i], words[j])) {
+                    result.add(words[i]);
+                    break;
                 }
             }
         }
