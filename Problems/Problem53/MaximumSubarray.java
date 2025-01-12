@@ -19,6 +19,40 @@ public class MaximumSubarray {
     }
 
     public static int maxSubArray(int[] nums) {
-        return 0;
+        int maxSum = Integer.MIN_VALUE;
+
+        // Initialize pointers and sums
+        int left = 0, center = 0, right = 0;
+        int sum = nums[0], leftSum = 0;
+
+        // Continue until each number has been the center
+        while (center < nums.length) {
+            // Add values to the right while they increase the sum
+            while (right < nums.length - 1 && nums[right + 1] > 0) {
+                right++;
+                sum += nums[right];
+            }
+
+            // Remove values from the left while they don't increase the sum
+            while (left < center && leftSum <= 0) {
+                sum -= nums[left];
+                leftSum -= nums[left];
+                left++;
+            }
+
+            // Save the maximum sum
+            maxSum = Math.max(maxSum, sum);
+
+            // Increment the center pointer
+            if (right < nums.length - 1 && right == center) {
+                right++;
+                sum += nums[right];
+            }
+
+            leftSum += nums[center];
+            center++;
+        }
+
+        return maxSum;
     }
 }
