@@ -22,62 +22,32 @@ public class NQueens2 {
     }
 
     public static int totalNQueens(int n) {
-        int result = 0;
+        // Keep track of columns used and diagonals used, filling row-wise
         boolean[] columnsUsed = new boolean[n];
-        int[] columnValues = new int[n];
-        int mid = (n + 1) / 2;
+        boolean[] diagonal = new boolean[2*n - 1];
+        boolean[] antiDiagonal = new boolean[2*n - 1];
 
-        // Only find solutions for the left half of the board (including
-        // center): other solutions will be mirrored
-        for (int j = 0; j < mid; j++) {
-            columnValues[0] = j;
-            columnsUsed[j] = true;
-            result = nQueensDFS(n, 1, columnsUsed, columnValues, result);
-            columnsUsed[j] = false;
-        }
-
-        return result;
+        return nQueensDFS(columnsUsed, diagonal, antiDiagonal, 0);
     }
 
-    private static int nQueensDFS(int n, int row, boolean[] columnsUsed,
-                                   int[] columnValues, int result) {
+    private static int nQueensDFS(boolean[] columnsUsed, boolean[] diagonal, boolean[] antiDiagonal, int row) {
+        int n = columnsUsed.length, count = 0;
+
+        // If all rows are filled, add a solution
         if (row == n) {
-            // Add solution
-            result++;
-
-            // If the first queen is not in the center column, add the mirrored solution
-            if (!(n % 2 == 1 && columnValues[0] == (n / 2))) {
-                result++;
-            }
-
-            return result;
+            return 1;
         }
 
-        // Try to place a queen in each column for the current row
-        for (int j = 0; j < n; j++) {
-            if (columnsUsed[j]) {
-                continue;
+        // Fill subsequent rows using a DFS
+        for (int column = 0; column < n; column++) {
+            // Check that the current column and both the upper left and upper right diagonals are not used
+            if (!columnsUsed[column] && !diagonal[row + column] && !antiDiagonal[row - column + n - 1]) {
+                columnsUsed[column] = diagonal[row + column] = antiDiagonal[row - column + n - 1] = true;
+                count += nQueensDFS(columnsUsed, diagonal, antiDiagonal, row + 1);
+                columnsUsed[column] = diagonal[row + column] = antiDiagonal[row - column + n - 1] = false;
             }
-
-            // Check diagonals with previous rows
-            boolean diagonal = false;
-            for (int r = 0; r < row; r++) {
-                if (row - r == Math.abs(columnValues[r] - j)) {
-                    diagonal = true;
-                    break;
-                }
-            }
-
-            if (diagonal) {
-                continue;
-            }
-
-            columnsUsed[j] = true;
-            columnValues[row] = j;
-            result = nQueensDFS(n, row + 1, columnsUsed, columnValues, result);
-            columnsUsed[j] = false;
         }
 
-        return result;
+        return count;
     }
 }
