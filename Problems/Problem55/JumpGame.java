@@ -16,12 +16,35 @@ package Problem55;
 
 public class JumpGame {
     public static void main(String[] args) {
-        int[] nums = {2, 3, 1, 1, 4};
+        int[] nums = {3, 2, 1, 0, 4};
 
         System.out.println(canJump(nums));
     }
 
     public static boolean canJump(int[] nums) {
-        return false;
+        int currentJumpMax = 0;
+        int maxReachable = 0;
+
+        for (int i = 0; i < nums.length - 1; i++) {
+            // Calculate the furthest reachable point for each index
+            maxReachable = Math.max(maxReachable, i + nums[i]);
+
+            // Check if end can be reached
+            if (maxReachable == nums.length - 1) {
+                break;
+            }
+
+            // Take the next jump once all options have been seen
+            if (i == currentJumpMax) {
+                // Check if end cannot be reached
+                if (currentJumpMax == maxReachable) {
+                    return false;
+                }
+
+                currentJumpMax = maxReachable;
+            }
+        }
+
+        return true;
     }
 }
