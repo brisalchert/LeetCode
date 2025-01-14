@@ -22,27 +22,19 @@ public class JumpGame {
     }
 
     public static boolean canJump(int[] nums) {
-        int currentJumpMax = 0;
-        int maxReachable = 0;
+        int moves = 0;
 
-        for (int i = 0; i < nums.length - 1; i++) {
-            // Calculate the furthest reachable point for each index
-            maxReachable = Math.max(maxReachable, i + nums[i]);
-
-            // Check if end can be reached
-            if (maxReachable == nums.length - 1) {
-                break;
+        for (int num : nums) {
+            if (moves < 0) {
+                return false;
             }
 
-            // Take the next jump once all options have been seen
-            if (i == currentJumpMax) {
-                // Check if end cannot be reached
-                if (currentJumpMax == maxReachable) {
-                    return false;
-                }
-
-                currentJumpMax = maxReachable;
+            // Replenish moves remaining if possible
+            if (num > moves) {
+                moves = num;
             }
+
+            moves--;
         }
 
         return true;
