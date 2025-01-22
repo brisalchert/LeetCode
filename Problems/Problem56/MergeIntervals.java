@@ -13,6 +13,8 @@
 package Problem56;
 
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedList;
 
 public class MergeIntervals {
     public static void main(String[] args) {
@@ -27,6 +29,22 @@ public class MergeIntervals {
     }
 
     public static int[][] merge(int[][] intervals) {
-        return null;
+        // Sort the intervals by their start values
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+
+        int lastMerged = 0;
+
+        for (int i = 1; i < intervals.length; i++) {
+            if (intervals[i][0] <= intervals[lastMerged][1]) {
+                intervals[lastMerged][1] = Math.max(intervals[lastMerged][1], intervals[i][1]);
+            } else {
+                // Replace a previously merged interval with a non-overlapping interval
+                lastMerged++;
+                intervals[lastMerged] = intervals[i];
+            }
+        }
+
+        // Return only the merged result
+        return Arrays.copyOfRange(intervals, 0, lastMerged + 1);
     }
 }
