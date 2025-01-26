@@ -20,6 +20,45 @@ public class SpiralMatrix2 {
     }
 
     public static int[][] generateMatrix(int n) {
-        return null;
+        int[][] matrix = new int[n][n];
+        int level = 0;
+        int value = 1;
+
+        while (level < (n + 1) / 2) {
+            int i = level;
+            int j = level;
+
+            // Always add first element of a given level
+            matrix[i][j] = value;
+            value++;
+
+            while (j < n - level - 1) {
+                j++;
+                matrix[i][j] = value;
+                value++;
+            }
+
+            while (i < n - level - 1) {
+                i++;
+                matrix[i][j] = value;
+                value++;
+            }
+
+            while (j > level) {
+                j--;
+                matrix[i][j] = value;
+                value++;
+            }
+
+            while (i > level + 1) {
+                i--;
+                matrix[i][j] = value;
+                value++;
+            }
+
+            level++;
+        }
+
+        return matrix;
     }
 }
