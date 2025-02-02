@@ -21,12 +21,27 @@ package Problem3151;
 
 public class SpecialArray1 {
     public static void main(String[] args) {
-        int[] nums = {4, 3, 1, 6};
+        int[] nums = {4, 3, 2, 7};
 
         System.out.println(isArraySpecial(nums));
     }
 
     public static boolean isArraySpecial(int[] nums) {
-        return false;
+        if (nums.length < 2) {
+            return true;
+        }
+
+        int i = 0, j = 1;
+
+        while (j < nums.length) {
+            if (nums[i] % 2 == nums[j] % 2) {
+                return false;
+            }
+
+            i++;
+            j++;
+        }
+
+        return true;
     }
 }
