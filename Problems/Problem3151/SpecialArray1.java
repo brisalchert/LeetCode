@@ -27,19 +27,10 @@ public class SpecialArray1 {
     }
 
     public static boolean isArraySpecial(int[] nums) {
-        if (nums.length < 2) {
-            return true;
-        }
-
-        int i = 0, j = 1;
-
-        while (j < nums.length) {
-            if (nums[i] % 2 == nums[j] % 2) {
+        for (int i = 1; i < nums.length; i++) {
+            if (((nums[i] ^ nums[i - 1]) & 1) == 0) {
                 return false;
             }
-
-            i++;
-            j++;
         }
 
         return true;
