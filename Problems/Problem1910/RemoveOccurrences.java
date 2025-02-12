@@ -22,6 +22,8 @@
 
 package Problem1910;
 
+import java.util.Stack;
+
 public class RemoveOccurrences {
     public static void main(String[] args) {
         String s = "axxxxyyyyb";
@@ -31,6 +33,41 @@ public class RemoveOccurrences {
     }
 
     public static String removeOccurrences(String s, String part) {
-        return "";
+        if (s.length() < part.length()) {
+            return s;
+        }
+
+        int sIndex = 0;
+        int pIndex = 0;
+        Stack<Integer> pIndexStack = new Stack<>();
+
+        while (sIndex < s.length()) {
+            if (s.charAt(sIndex) == part.charAt(pIndex)) {
+                pIndex++;
+                pIndexStack.push(pIndex);
+
+                if (pIndex == part.length()) {
+                    // Remove substring
+                    s = s.substring(0, sIndex - part.length() + 1) + s.substring(sIndex + 1);
+                    for (int i = 0; i < part.length(); i++) {
+                        pIndexStack.pop();
+                    }
+
+                    // Reset indices
+                    sIndex -= part.length();
+                    pIndex = (pIndexStack.isEmpty()) ? 0 : pIndexStack.peek();
+                }
+
+                sIndex++;
+            } else if (pIndex > 0) {
+                pIndex--;
+            } else {
+                pIndexStack.clear();
+
+                sIndex++;
+            }
+        }
+
+        return s;
     }
 }
