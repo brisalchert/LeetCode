@@ -22,8 +22,6 @@
 
 package Problem1910;
 
-import java.util.Stack;
-
 public class RemoveOccurrences {
     public static void main(String[] args) {
         String s = "axxxxyyyyb";
@@ -37,37 +35,33 @@ public class RemoveOccurrences {
             return s;
         }
 
-        int sIndex = 0;
-        int pIndex = 0;
-        Stack<Integer> pIndexStack = new Stack<>();
+        char[] sArray = s.toCharArray();
+        char[] partArray = part.toCharArray();
+        char[] resultStack = new char[sArray.length];
+        int stackSize = 0;
+        char partEndChar = partArray[partArray.length - 1];
 
-        while (sIndex < s.length()) {
-            if (s.charAt(sIndex) == part.charAt(pIndex)) {
-                pIndex++;
-                pIndexStack.push(pIndex);
+        for (char c : sArray) {
+            resultStack[stackSize++] = c;
 
-                if (pIndex == part.length()) {
-                    // Remove substring
-                    s = s.substring(0, sIndex - part.length() + 1) + s.substring(sIndex + 1);
-                    for (int i = 0; i < part.length(); i++) {
-                        pIndexStack.pop();
-                    }
+            // Check for possibility of instance of part
+            if (c == partEndChar && stackSize >= partArray.length) {
+                int i = stackSize - 1;
+                int j = partArray.length - 1;
 
-                    // Reset indices
-                    sIndex -= part.length();
-                    pIndex = (pIndexStack.isEmpty()) ? 0 : pIndexStack.peek();
+                // Check if the entirety of part is present
+                while (j >= 0 && resultStack[i] == partArray[j]) {
+                    i--;
+                    j--;
                 }
 
-                sIndex++;
-            } else if (pIndex > 0) {
-                pIndex--;
-            } else {
-                pIndexStack.clear();
-
-                sIndex++;
+                // If entire part was found, move stack size/index back to overwrite part
+                if (j < 0) {
+                    stackSize = i + 1;
+                }
             }
         }
 
-        return s;
+        return new String(resultStack, 0, stackSize);
     }
 }
