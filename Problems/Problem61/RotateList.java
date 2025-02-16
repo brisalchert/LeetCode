@@ -11,6 +11,9 @@
 package Problem61;
 
 public class RotateList {
+    private static int kAdj;
+    private static ListNode headAdj;
+
     public static void main(String[] args) {
         ListNode head = new ListNode(1);
         ListNode current = head;
@@ -29,7 +32,34 @@ public class RotateList {
     }
 
     public static ListNode rotateRight(ListNode head, int k) {
-        return head;
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        kAdj = -1;
+        headAdj = head;
+
+        rotateBacktrack(head, k, 0);
+
+        return headAdj;
+    }
+
+    private static void rotateBacktrack(ListNode current, int k, int index) {
+        if (current.next != null) {
+            rotateBacktrack(current.next, k, index + 1);
+        } else {
+            // At the end of the list, calculate kAdj, create a loop and begin backtracking
+            int size = index + 1;
+            kAdj = k % size;
+            kAdj = size - 1 - kAdj;
+            current.next = headAdj;
+        }
+
+        if (index == kAdj) {
+            // Set new head and tail nodes by adjusting pointers
+            headAdj = current.next;
+            current.next = null;
+        }
     }
 
     public static class ListNode {
