@@ -11,8 +11,8 @@
 package Problem61;
 
 public class RotateList {
-    private static int kAdj;
-    private static ListNode headAdj;
+    private static int kAdj; // 0-based index of the new tail node after rotation
+    private static ListNode headAdj; // Reference to the new head node after rotation
 
     public static void main(String[] args) {
         ListNode head = new ListNode(1);
