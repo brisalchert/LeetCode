@@ -11,9 +11,6 @@
 package Problem61;
 
 public class RotateList {
-    private static int kAdj; // 0-based index of the new tail node after rotation
-    private static ListNode headAdj; // Reference to the new head node after rotation
-
     public static void main(String[] args) {
         ListNode head = new ListNode(1);
         ListNode current = head;
@@ -32,34 +29,36 @@ public class RotateList {
     }
 
     public static ListNode rotateRight(ListNode head, int k) {
-        if (head == null || head.next == null) {
+        if (head == null || head.next == null || k == 0) {
             return head;
         }
 
-        kAdj = -1;
-        headAdj = head;
+        ListNode current = head;
+        int length = 1;
 
-        rotateBacktrack(head, k, 0);
-
-        return headAdj;
-    }
-
-    private static void rotateBacktrack(ListNode current, int k, int index) {
-        if (current.next != null) {
-            rotateBacktrack(current.next, k, index + 1);
-        } else {
-            // At the end of the list, calculate kAdj, create a loop and begin backtracking
-            int size = index + 1;
-            kAdj = k % size;
-            kAdj = size - 1 - kAdj;
-            current.next = headAdj;
+        // Traverse to the end of the list
+        while (current.next != null) {
+            current = current.next;
+            length++;
         }
 
-        if (index == kAdj) {
-            // Set new head and tail nodes by adjusting pointers
-            headAdj = current.next;
-            current.next = null;
+        // Create a loop
+        current.next = head;
+
+        // Calculate k as the index of the new head node
+        k = k % length;
+        k = length - k;
+
+        // Traverse to the node just before the new head
+        while (k-- > 0) {
+            current = current.next;
         }
+
+        // Set new head and tail nodes
+        head = current.next;
+        current.next = null;
+
+        return head;
     }
 
     public static class ListNode {
