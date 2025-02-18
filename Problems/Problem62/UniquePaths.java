@@ -21,9 +21,9 @@
 
 package Problem62;
 
-public class UniquePaths {
-    private static int[][] memo;
+import java.util.Arrays;
 
+public class UniquePaths {
     public static void main(String[] args) {
         int m = 4;
         int n = 7;
@@ -32,31 +32,23 @@ public class UniquePaths {
     }
 
     public static int uniquePaths(int m, int n) {
-        memo = new int[m][n];
+        int[] previousRow = new int[n];
+        Arrays.fill(previousRow, 1);
 
-        return uniquePathsHelper(m, n);
-    }
+        // Each cell's unique solution count is equal to the sum of the
+        // solution counts of the cells directly up and directly left
+        for (int row = 1; row < m; row++) {
+            int[] currentRow = new int[n];
+            currentRow[0] = 1;
 
-    private static int uniquePathsHelper(int m, int n) {
-        if (m == 1) {
-            return 1;
-        }
-
-        if (m == 2) {
-            return n;
-        }
-
-        int solutions = 0;
-
-        while (n > 0) {
-            if (memo[m - 2][n - 1] == 0) {
-                memo[m - 2][n - 1] = uniquePathsHelper(m - 1, n);
+            for (int col = 1; col < n; col++) {
+                currentRow[col] = previousRow[col] + currentRow[col - 1];
             }
 
-            solutions +=  memo[m - 2][n - 1];
-            n--;
+            // Set new previous row for next iteration
+            previousRow = currentRow;
         }
 
-        return solutions;
+        return previousRow[n - 1];
     }
 }
