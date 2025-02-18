@@ -22,14 +22,41 @@
 package Problem62;
 
 public class UniquePaths {
+    private static int[][] memo;
+
     public static void main(String[] args) {
-        int m = 3;
-        int n = 2;
+        int m = 4;
+        int n = 7;
 
         System.out.println(uniquePaths(m,n));
     }
 
     public static int uniquePaths(int m, int n) {
-        return 0;
+        memo = new int[m][n];
+
+        return uniquePathsHelper(m, n);
+    }
+
+    private static int uniquePathsHelper(int m, int n) {
+        if (m == 1) {
+            return 1;
+        }
+
+        if (m == 2) {
+            return n;
+        }
+
+        int solutions = 0;
+
+        while (n > 0) {
+            if (memo[m - 2][n - 1] == 0) {
+                memo[m - 2][n - 1] = uniquePathsHelper(m - 1, n);
+            }
+
+            solutions +=  memo[m - 2][n - 1];
+            n--;
+        }
+
+        return solutions;
     }
 }
