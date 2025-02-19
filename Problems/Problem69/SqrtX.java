@@ -18,12 +18,25 @@ package Problem69;
 
 public class SqrtX {
     public static void main(String[] args) {
-        int x = 8;
+        int x = 144;
 
         System.out.println(mySqrt(x));
     }
 
     public static int mySqrt(int x) {
-        return 0;
+        if (x == 0) {
+            return 0;
+        }
+
+        int n = 3;
+        int result = 0;
+
+        while (x > 0) {
+            x -= n;
+            n += 2;
+            result++;
+        }
+
+        return result;
     }
 }
