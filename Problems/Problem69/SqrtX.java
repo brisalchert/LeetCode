@@ -24,19 +24,23 @@ public class SqrtX {
     }
 
     public static int mySqrt(int x) {
-        if (x == 0) {
-            return 0;
+        int left = 1;
+        int right = x;
+        int mid;
+
+        // Perform binary search for the largest integer square root that does not overshoot x
+        while (left <= right) {
+            mid = left + (right - left) / 2; // Avoid integer overflow
+
+            if (mid > x / mid) {
+                right = mid - 1;
+            } else if (mid < x / mid) {
+                left = mid + 1;
+            } else {
+                return mid;
+            }
         }
 
-        int n = 3;
-        int result = 0;
-
-        while (x > 0) {
-            x -= n;
-            n += 2;
-            result++;
-        }
-
-        return result;
+        return right;
     }
 }
