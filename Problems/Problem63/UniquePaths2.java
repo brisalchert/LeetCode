@@ -42,31 +42,20 @@ public class UniquePaths2 {
         int m = obstacleGrid.length;
         int n = obstacleGrid[0].length;
         int[] previousRow = new int[n];
-        int i = 0;
-
-        // Mark all cells in the first row before an obstacle as reachable
-        while (i < n && obstacleGrid[0][i] != 1) {
-            previousRow[i] = 1;
-            i++;
-        }
+        int[] currentRow = new int[n];
+        previousRow[0] = 1; // Assume one way to reach the starting point
 
         // Each cell's unique solution count is equal to the sum of the
         // solution counts of the cells directly up and directly left
-        for (int row = 1; row < m; row++) {
-            int[] currentRow = new int[n];
-            currentRow[0] = (obstacleGrid[row][0] == 0) ? previousRow[0] : 0;
+        for (int row = 0; row < m; row++) {
+            currentRow[0] = (obstacleGrid[row][0] == 1) ? 0 : previousRow[0];
 
             for (int col = 1; col < n; col++) {
-                if (obstacleGrid[row][col] == 1) {
-                    // Set cell's solution count to zero if it contains an obstacle
-                    currentRow[col] = 0;
-                } else {
-                    currentRow[col] = previousRow[col] + currentRow[col - 1];
-                }
+                currentRow[col] = (obstacleGrid[row][col] == 1) ? 0 : currentRow[col - 1] + previousRow[col];
             }
 
             // Set new previous row for next iteration
-            previousRow = currentRow;
+            System.arraycopy(currentRow, 0, previousRow, 0, n);
         }
 
         return previousRow[n - 1];
