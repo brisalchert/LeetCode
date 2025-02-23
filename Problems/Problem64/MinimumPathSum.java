@@ -26,6 +26,26 @@ public class MinimumPathSum {
     }
 
     public static int minPathSum(int[][] grid) {
-        return 0;
+        int m =  grid.length;
+        int n = grid[0].length;
+        int[] previousRow = new int[n];
+        int sum = 0;
+        for (int j = 0; j < n; j++) {
+            sum += grid[0][j];
+            previousRow[j] = sum;
+        }
+
+        for (int row = 1; row < m; row++) {
+            int[] currentRow = new int[n];
+            currentRow[0] = grid[row][0] + previousRow[0];
+
+            for (int col = 1; col < n; col++) {
+                currentRow[col] = grid[row][col] + Math.min(currentRow[col - 1], previousRow[col]);
+            }
+
+            previousRow = currentRow;
+        }
+
+        return previousRow[n - 1];
     }
 }
