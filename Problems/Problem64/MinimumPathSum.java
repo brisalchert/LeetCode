@@ -28,24 +28,22 @@ public class MinimumPathSum {
     public static int minPathSum(int[][] grid) {
         int m =  grid.length;
         int n = grid[0].length;
-        int[] previousRow = new int[n];
-        int sum = 0;
-        for (int j = 0; j < n; j++) {
-            sum += grid[0][j];
-            previousRow[j] = sum;
+        int[] currentRow = new int[n];
+        currentRow[0] = grid[0][0];
+
+        // Initialize starting values for each column
+        for (int col = 1; col < n; col++) {
+            currentRow[col] = currentRow[col - 1] + grid[0][col];
         }
 
         for (int row = 1; row < m; row++) {
-            int[] currentRow = new int[n];
-            currentRow[0] = grid[row][0] + previousRow[0];
+            currentRow[0] += grid[row][0];
 
             for (int col = 1; col < n; col++) {
-                currentRow[col] = grid[row][col] + Math.min(currentRow[col - 1], previousRow[col]);
+                currentRow[col] = grid[row][col] + Math.min(currentRow[col], currentRow[col - 1]);
             }
-
-            previousRow = currentRow;
         }
 
-        return previousRow[n - 1];
+        return currentRow[n - 1];
     }
 }
