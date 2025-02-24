@@ -43,34 +43,27 @@ public class ValidNumber {
     }
 
     public static boolean isNumber(String s) {
-        char[] number = s.toLowerCase().toCharArray();
-        boolean exponent = false;
-        boolean decimal = false;
+        s = s.trim().toLowerCase();
+        boolean decimalSeen = false;
+        boolean exponentSeen = false;
+        boolean digitSeen = false;
 
-        for (int i = 0; i < number.length; i++) {
-            if (number[i] == 'e') {
-                if (exponent) return false;
-
-                if (i == 0 || (number[i - 1] != '.' && !Character.isDigit(number[i - 1]))) return false;
-                if (i == number.length - 1 || (number[i + 1] != '+' && number[i + 1] != '-' && !Character.isDigit(number[i + 1]))) return false;
-
-                exponent = true;
-            } else if (number[i] == '.') {
-                if (exponent) return false;
-                if (decimal) return false;
-
-                // Ensure decimal has digits on at least one side
-                if ((i == 0 || !Character.isDigit(number[i - 1]))
-                    && (i == number.length - 1 || !Character.isDigit(number[i + 1]))) return false;
-
-                decimal = true;
-            } else if (number[i] != 'e' && 0 <= number[i] - 'a' && number[i] - 'a' <= 25) return false;
-            else if ((number[i] == '-' || number[i] == '+')) {
-                if (i != 0 && number[i - 1] != 'e') return false;
-                if (i == number.length - 1 || (!Character.isDigit(number[i + 1]) && number[i + 1] != '.')) return false;
-            }
+        for (int i = 0; i < s.length(); i++) {
+            if ('0' <= s.charAt(i) && s.charAt(i) <= '9') {
+                digitSeen = true;
+            } else if (s.charAt(i) == '.') {
+                if (exponentSeen || decimalSeen) return false;
+                decimalSeen = true;
+            } else if (s.charAt(i) == 'e') {
+                if (exponentSeen || !digitSeen) return false;
+                digitSeen = false;
+                exponentSeen = true;
+            } else if (s.charAt(i) == '+' || s.charAt(i) == '-') {
+                if (i != 0 && s.charAt(i-1) != 'e') return false;
+            } else return false;
         }
 
-        return true;
+        // Ensure number does not end with an empty exponent
+        return digitSeen;
     }
 }
