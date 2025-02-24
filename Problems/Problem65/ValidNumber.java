@@ -37,12 +37,40 @@ package Problem65;
 
 public class ValidNumber {
     public static void main(String[] args) {
-        String s = "-90e3";
+        String s = "-90E3";
 
         System.out.println(isNumber(s));
     }
 
     public static boolean isNumber(String s) {
-        return false;
+        char[] number = s.toLowerCase().toCharArray();
+        boolean exponent = false;
+        boolean decimal = false;
+
+        for (int i = 0; i < number.length; i++) {
+            if (number[i] == 'e') {
+                if (exponent) return false;
+
+                if (i == 0 || (number[i - 1] != '.' && !Character.isDigit(number[i - 1]))) return false;
+                if (i == number.length - 1 || (number[i + 1] != '+' && number[i + 1] != '-' && !Character.isDigit(number[i + 1]))) return false;
+
+                exponent = true;
+            } else if (number[i] == '.') {
+                if (exponent) return false;
+                if (decimal) return false;
+
+                // Ensure decimal has digits on at least one side
+                if ((i == 0 || !Character.isDigit(number[i - 1]))
+                    && (i == number.length - 1 || !Character.isDigit(number[i + 1]))) return false;
+
+                decimal = true;
+            } else if (number[i] != 'e' && 0 <= number[i] - 'a' && number[i] - 'a' <= 25) return false;
+            else if ((number[i] == '-' || number[i] == '+')) {
+                if (i != 0 && number[i - 1] != 'e') return false;
+                if (i == number.length - 1 || (!Character.isDigit(number[i + 1]) && number[i + 1] != '.')) return false;
+            }
+        }
+
+        return true;
     }
 }
