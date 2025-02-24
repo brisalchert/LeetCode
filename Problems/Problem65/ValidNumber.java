@@ -43,23 +43,22 @@ public class ValidNumber {
     }
 
     public static boolean isNumber(String s) {
-        s = s.trim().toLowerCase();
         boolean decimalSeen = false;
         boolean exponentSeen = false;
         boolean digitSeen = false;
 
         for (int i = 0; i < s.length(); i++) {
-            if ('0' <= s.charAt(i) && s.charAt(i) <= '9') {
-                digitSeen = true;
-            } else if (s.charAt(i) == '.') {
+            char c = s.charAt(i);
+            if ('0' <= c && c <= '9') digitSeen = true;
+            else if (c == '.') {
                 if (exponentSeen || decimalSeen) return false;
                 decimalSeen = true;
-            } else if (s.charAt(i) == 'e') {
+            } else if (c == 'e' || c == 'E') {
                 if (exponentSeen || !digitSeen) return false;
                 digitSeen = false;
                 exponentSeen = true;
-            } else if (s.charAt(i) == '+' || s.charAt(i) == '-') {
-                if (i != 0 && s.charAt(i-1) != 'e') return false;
+            } else if (c == '+' || c == '-') {
+                if (i != 0 && s.charAt(i - 1) != 'e' && s.charAt(i - 1) != 'E') return false;
             } else return false;
         }
 
