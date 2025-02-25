@@ -35,8 +35,8 @@ import java.util.List;
 
 public class TextJustification {
     public static void main(String[] args) {
-        String[] words = {"a"};
-        int maxWidth = 1;
+        String[] words = {"Science","is","what","we","understand","well","enough","to","explain","to","a","computer.","Art","is","everything","else","we","do"};
+        int maxWidth = 20;
 
         List<String> result = fullJustify(words, maxWidth);
 
