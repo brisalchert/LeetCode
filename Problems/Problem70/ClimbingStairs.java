@@ -33,18 +33,13 @@ public class ClimbingStairs {
     public static int climbStairs(int n) {
         if (n <= 2) return n;
 
-        int[] memo = new int[n + 1];
-        return climbStairs(n, memo);
-    }
+        int previous = 1, current = 2;
 
-    private static int climbStairs(int n, int[] memo) {
-        if (n <= 2) return n;
-        if (memo[n] != 0) return memo[n];
+        for (int i = 3; i <= n; i++) {
+            current = current + previous;
+            previous = current - previous;
+        }
 
-        memo[n - 1] = climbStairs(n - 1, memo);
-        memo[n - 2] = climbStairs(n - 2, memo);
-        memo[n] = memo[n - 1] + memo[n - 2];
-
-        return memo[n];
+        return current;
     }
 }
