@@ -25,12 +25,26 @@ package Problem70;
 
 public class ClimbingStairs {
     public static void main(String[] args) {
-        int n = 3;
+        int n = 4;
 
         System.out.println(climbStairs(n));
     }
 
     public static int climbStairs(int n) {
-        return 0;
+        if (n <= 2) return n;
+
+        int[] memo = new int[n + 1];
+        return climbStairs(n, memo);
+    }
+
+    private static int climbStairs(int n, int[] memo) {
+        if (n <= 2) return n;
+        if (memo[n] != 0) return memo[n];
+
+        memo[n - 1] = climbStairs(n - 1, memo);
+        memo[n - 2] = climbStairs(n - 2, memo);
+        memo[n] = memo[n - 1] + memo[n - 2];
+
+        return memo[n];
     }
 }
