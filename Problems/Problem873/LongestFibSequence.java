@@ -25,6 +25,9 @@
 
 package Problem873;
 
+import java.util.Arrays;
+import java.util.HashMap;
+
 public class LongestFibSequence {
     public static void main (String[] args) {
         int[] arr = {1,3,7,11,12,14,18};
@@ -33,6 +36,38 @@ public class LongestFibSequence {
     }
 
     public static int lenLongestFibSubseq(int[] arr) {
-        return 0;
+        int[][] dp = new int[arr.length][arr.length];
+        HashMap<Integer, Integer> valueToIndex = new HashMap<>();
+        int result = 0;
+
+        // Fill DP table with values of 2 (for minimum Fib sequence length)
+        Arrays.stream(dp).forEach(A -> Arrays.fill(A, 2));
+
+        // Initialize valueToIndex HashMap
+        for (int i = 0; i < arr.length; i++) {
+            valueToIndex.put(arr[i], i);
+        }
+
+        // Iterate through all pairs, incrementing sequence lengths in DP table
+        for (int j = 1; j < arr.length; j++) {
+            int fib1 = arr[j];
+
+            for (int k = j + 1; k < arr.length; k++) {
+                int fib2 = arr[k];
+                int fib0 = fib2 - fib1;
+
+                if (fib0 >= fib1) break; // Sequence impossible
+
+                if (valueToIndex.containsKey(fib0)) {
+                    int i = valueToIndex.get(fib0);
+                    dp[j][k] = dp[i][j] + 1;
+                }
+
+                result = Math.max(result, dp[j][k]);
+            }
+        }
+
+        // Prevent invalid result values
+        return (result > 2) ? result : 0;
     }
 }
