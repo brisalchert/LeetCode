@@ -34,39 +34,32 @@
 
 package Problem71;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Deque;
+import java.util.LinkedList;
 
 public class SimplifyPath {
     public static void main(String[] args) {
         String path = "/.../a/../b/c/../d/./";
 
+        long start = System.nanoTime();
         System.out.println(simplifyPath(path));
+        long end = System.nanoTime();
+        System.out.println(end-start);
     }
 
     public static String simplifyPath(String path) {
-        ArrayList<String> list = new ArrayList<>(List.of(path.split("/")));
-        int index = 0;
+        Deque<String> stack = new LinkedList<>();
 
-        while (index < list.size()) {
-            if (list.get(index).isEmpty() || list.get(index).equals(".")) {
-                list.remove(index);
-            } else if (list.get(index).equals("..")) {
-                if (index > 0) {
-                    list.remove(--index);
-                }
-                list.remove(index);
-            } else {
-                index++;
-            }
+        for (String s: path.split("/")) {
+            if (s.equals("..")) stack.poll(); // Safe if size == 0
+            else if (!s.isEmpty() && !s.equals(".")) stack.push(s);
         }
 
-        if (list.isEmpty()) return "/";
+        if (stack.isEmpty()) return "/";
 
         StringBuilder sb = new StringBuilder();
-
-        for (String file : list) {
-            sb.append("/").append(file);
+        while (!stack.isEmpty()) {
+            sb.append("/").append(stack.pollLast());
         }
 
         return sb.toString();
