@@ -34,6 +34,9 @@
 
 package Problem71;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SimplifyPath {
     public static void main(String[] args) {
         String path = "/.../a/../b/c/../d/./";
@@ -42,6 +45,30 @@ public class SimplifyPath {
     }
 
     public static String simplifyPath(String path) {
-        return "";
+        ArrayList<String> list = new ArrayList<>(List.of(path.split("/")));
+        int index = 0;
+
+        while (index < list.size()) {
+            if (list.get(index).isEmpty() || list.get(index).equals(".")) {
+                list.remove(index);
+            } else if (list.get(index).equals("..")) {
+                if (index > 0) {
+                    list.remove(--index);
+                }
+                list.remove(index);
+            } else {
+                index++;
+            }
+        }
+
+        if (list.isEmpty()) return "/";
+
+        StringBuilder sb = new StringBuilder();
+
+        for (String file : list) {
+            sb.append("/").append(file);
+        }
+
+        return sb.toString();
     }
 }
