@@ -20,6 +20,8 @@
 
 package Problem72;
 
+import java.util.Arrays;
+
 public class EditDistance {
     public static void main(String[] args) {
         String word1 = "horse";
@@ -29,27 +31,30 @@ public class EditDistance {
     }
 
     public static int minDistance(String word1, String word2) {
-        int[][] dp = new int[word1.length() + 1][word2.length() + 1];
+        int m = word1.length();
+        int n = word2.length();
 
-        // Initialize base case row and column
-        for (int i = 1; i <= word1.length(); i++) {
-            dp[i][0] = i;
+        int[] previousRow = new int[n + 1];
+        int[] currentRow = new int[n + 1];
+
+        // Initialize first row with base case values
+        for (int j = 0; j <= n; j++) {
+            previousRow[j] = j;
         }
 
-        for (int j = 1; j <= word2.length(); j++) {
-            dp[0][j] = j;
-        }
+        // Compute remaining matrix values
+        for (int i = 1; i <= m; i++) {
+            // Initialize first column with row value
+            currentRow[0] = i;
 
-        // Compute remaining cells
-        for (int i = 1; i <= word1.length(); i++) {
-            for (int j = 1; j <= word2.length(); j++) {
-                if (word1.charAt(i - 1) == word2.charAt(j - 1)) dp[i][j] = dp[i - 1][j - 1]; // Equal
-                else {
-                    dp[i][j] = 1 + Math.min(dp[i - 1][j - 1], Math.min(dp[i - 1][j], dp[i][j - 1]));
-                }
+            for (int j = 1; j <= n; j++) {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) currentRow[j] = previousRow[j - 1]; // Equal
+                else currentRow[j] = 1 + Math.min(previousRow[j - 1], Math.min(previousRow[j], currentRow[j - 1]));
             }
+
+            previousRow = Arrays.copyOf(currentRow, currentRow.length);
         }
 
-        return dp[word1.length()][word2.length()];
+        return previousRow[n];
     }
 }
