@@ -20,8 +20,6 @@
 
 package Problem72;
 
-import java.util.Arrays;
-
 public class EditDistance {
     public static void main(String[] args) {
         String word1 = "horse";
