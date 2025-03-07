@@ -12,6 +12,7 @@
 
 package Problem73;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class SetMatrixZeroes {
@@ -30,6 +31,28 @@ public class SetMatrixZeroes {
     }
 
     public static void setZeroes(int[][] matrix) {
+        ArrayList<Integer> columnIndices = new ArrayList<>();
 
+        // Fill rows and record column indices
+        for (int[] row : matrix) {
+            int currentZeroes = columnIndices.size();
+
+            for (int j = 0; j < row.length; j++) {
+                if (row[j] == 0) {
+                    columnIndices.add(j);
+                }
+            }
+
+            if (columnIndices.size() > currentZeroes) {
+                Arrays.fill(row, 0);
+            }
+        }
+
+        // Fill columns
+        for (int i = 0; i < matrix.length; i++) {
+            for (int column : columnIndices) {
+                matrix[i][column] = 0;
+            }
+        }
     }
 }
