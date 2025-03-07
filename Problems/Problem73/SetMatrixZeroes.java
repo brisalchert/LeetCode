@@ -12,7 +12,6 @@
 
 package Problem73;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class SetMatrixZeroes {
