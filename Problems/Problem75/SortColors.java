@@ -29,40 +29,28 @@ public class SortColors {
     public static void sortColors(int[] nums) {
         if(nums == null || nums.length == 0) return;
 
-        quickSort(nums, 0, nums.length - 1);
-    }
+        // Initialize pointers for Dutch National Flag algorithm
+        int low = 0;
+        int mid = 0;
+        int high = nums.length - 1;
 
-    private static void quickSort(int[] nums, int low, int high) {
-        if (low < high) {
-            int pivotIndex = hoarePartition(nums, low, high);
-
-            // Recursive calls
-            quickSort(nums, low, pivotIndex);
-            quickSort(nums, pivotIndex + 1, high);
-        }
-    }
-
-    private static int hoarePartition(int[] nums, int low, int high) {
-        int pivot = nums[low];
-        int i = low - 1;
-        int j = high + 1;
-
-        while (true) {
-            do {
-                i++;
-            } while (nums[i] < pivot);
-
-            do {
-                j--;
-            } while (nums[j] > pivot);
-
-            if (i >= j) {
-                return j;
+        while (mid <= high) {
+            if (nums[mid] == 0) {
+                swap(nums, low, mid);
+                low++;
+                mid++;
+            } else if (nums[mid] == 2) {
+                swap(nums, mid, high);
+                high--;
+            } else {
+                mid++;
             }
-
-            int temp = nums[i];
-            nums[i] = nums[j];
-            nums[j] = temp;
         }
+    }
+
+    private static void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 }
