@@ -20,7 +20,7 @@ import java.util.List;
 public class Combinations {
     public static void main(String[] args) {
         int n = 4;
-        int k = 2;
+        int k = 3;
 
         System.out.println(combine(n, k));
     }
@@ -28,6 +28,25 @@ public class Combinations {
     public static List<List<Integer>> combine(int n, int k) {
         List<List<Integer>> result = new ArrayList<>();
 
+        combineHelper(n, k, 1, new ArrayList<>(), result);
+
         return result;
+    }
+
+    private static void combineHelper(int n, int k, int next, List<Integer> currList, List<List<Integer>> result) {
+        if (currList.size() == k) {
+            result.add(new ArrayList<>(currList));
+
+            return;
+        }
+
+        int numsLeft = k - currList.size();
+
+        // Add one of the remaining elements and continue recursively
+        for (int j = next; j <= n - numsLeft + 1; j++) {
+            currList.add(j);
+            combineHelper(n, k, j + 1, currList, result);
+            currList.remove(currList.size() - 1);
+        }
     }
 }
