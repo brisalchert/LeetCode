@@ -23,30 +23,24 @@ public class Subsets {
     }
 
     public static List<List<Integer>> subsets(int[] nums) {
-        List<List<Integer>> result = new ArrayList<>();
-        List<Integer> currList = new ArrayList<>();
+        List<List<Integer>> subsets = new ArrayList<>();
 
         // Add the empty set
-        result.add(new ArrayList<>());
+        subsets.add(new ArrayList<>());
 
-        // Add non-empty subsets
-        subsetsHelper(nums, 0, currList, result);
+        for (int num : nums) {
+            int n = subsets.size();
 
-        return result;
-    }
+            for (int i = 0; i < n; i++) {
+                // Create a copy of the set in subsets
+                List<Integer> subset = new ArrayList<>(subsets.get(i));
 
-    private static void subsetsHelper(int[] nums, int index, List<Integer> currList, List<List<Integer>> result) {
-        // Base case
-        if (index == nums.length) {
-            return;
+                // Add num to the copy and append to subsets
+                subset.add(num);
+                subsets.add(subset);
+            }
         }
 
-        // Recursive case
-        for (int i = index; i < nums.length; i++) {
-            currList.add(nums[i]);
-            result.add(new ArrayList<>(currList));
-            subsetsHelper(nums, i + 1, currList, result);
-            currList.remove(currList.size() - 1);
-        }
+        return subsets;
     }
 }
