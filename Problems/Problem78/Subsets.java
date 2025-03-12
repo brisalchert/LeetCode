@@ -19,7 +19,7 @@ public class Subsets {
     public static void main(String[] args) {
         int[] nums = {1,2,3};
 
-        System.out.println(subsets(nums));
+        System.out.println(subsetsBit(nums));
     }
 
     public static List<List<Integer>> subsets(int[] nums) {
@@ -38,6 +38,24 @@ public class Subsets {
                 // Add num to the copy and append to subsets
                 subset.add(num);
                 subsets.add(subset);
+            }
+        }
+
+        return subsets;
+    }
+
+    public static List<List<Integer>> subsetsBit(int[] nums) {
+        int n = nums.length, p = 1 << n;
+        List<List<Integer>> subsets = new ArrayList<>(p);
+
+        for (int i = 0; i < p; i++) {
+
+            subsets.add(new ArrayList<>());
+
+            for (int j = 0; j < n; j++) {
+                if (((i >> j) & 1) != 0) {
+                    subsets.get(i).add(nums[j]);
+                }
             }
         }
 
