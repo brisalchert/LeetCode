@@ -23,12 +23,43 @@ package Problem2843;
 
 public class CountSymmetricIntegers {
     public static void main(String[] args) {
-        int low = 1, high = 100;
+        int low = 1200, high = 1230;
 
         System.out.println(countSymmetricIntegers(low, high));
     }
 
     public static int countSymmetricIntegers(int low, int high) {
-        return 0;
+        int count = 0;
+
+        // Iterate through the numbers from low to high
+        for (int current = low; current <= high; current++) {
+            // Ignore numbers with an odd number of digits
+            if (Math.floor(Math.log10(current)) % 2 == 1) {
+                String number = String.valueOf(current);
+
+                if (number.length() == 2 && (number.charAt(0) == number.charAt(1))) {
+                    count++;
+                } else {
+                    int cutoff = number.length() / 2;
+
+                    String left = number.substring(0, cutoff);
+                    String right = number.substring(cutoff);
+
+                    int leftSum = 0;
+                    int rightSum = 0;
+
+                    for (int i = 0; i < left.length(); i++) {
+                        leftSum += left.charAt(i);
+                        rightSum += right.charAt(i);
+                    }
+
+                    if (leftSum == rightSum) {
+                        count++;
+                    }
+                }
+            }
+        }
+
+        return count;
     }
 }
