@@ -34,28 +34,13 @@ public class CountSymmetricIntegers {
         // Iterate through the numbers from low to high
         for (int current = low; current <= high; current++) {
             // Ignore numbers with an odd number of digits
-            if (Math.floor(Math.log10(current)) % 2 == 1) {
-                String number = String.valueOf(current);
-
-                if (number.length() == 2 && (number.charAt(0) == number.charAt(1))) {
+            if (current < 100 && current % 11 == 0) {
+                count++;
+            } else if (current >= 1000 && current < 10000) {
+                int left = (current / 1000) + (current % 1000) / 100;
+                int right = (current % 100) / 10 + (current % 10);
+                if (left == right) {
                     count++;
-                } else {
-                    int cutoff = number.length() / 2;
-
-                    String left = number.substring(0, cutoff);
-                    String right = number.substring(cutoff);
-
-                    int leftSum = 0;
-                    int rightSum = 0;
-
-                    for (int i = 0; i < left.length(); i++) {
-                        leftSum += left.charAt(i);
-                        rightSum += right.charAt(i);
-                    }
-
-                    if (leftSum == rightSum) {
-                        count++;
-                    }
                 }
             }
         }
