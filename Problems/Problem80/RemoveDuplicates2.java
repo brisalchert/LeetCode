@@ -39,14 +39,32 @@
 
 package Problem80;
 
+import java.util.Arrays;
+
 public class RemoveDuplicates2 {
     public static void main(String[] args) {
-        int[] nums = {1,1,1,2,2,3};
+        int[] nums = {1,1,1,1,1,2,2,2,3,3,4,4,5,5,5,6,7,8,9,10,10,10,11,12,34,34,34,67,67,78};
 
         System.out.println(removeDuplicates(nums));
+        System.out.println(Arrays.toString(nums));
     }
 
     public static int removeDuplicates(int[] nums) {
-        return 0;
+        if (nums.length < 3) return nums.length;
+
+        int currentIndex = 2;
+        int resultIndex = 2;
+
+        while (currentIndex < nums.length) {
+            if (nums[currentIndex] == nums[resultIndex - 1] &&
+                nums[currentIndex] == nums[resultIndex - 2]) {
+                // Skip any duplicates after the first
+                currentIndex++;
+            } else {
+                nums[resultIndex++] = nums[currentIndex++];
+            }
+        }
+
+        return resultIndex;
     }
 }
