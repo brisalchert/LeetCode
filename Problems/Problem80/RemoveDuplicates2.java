@@ -52,16 +52,11 @@ public class RemoveDuplicates2 {
     public static int removeDuplicates(int[] nums) {
         if (nums.length < 3) return nums.length;
 
-        int currentIndex = 2;
         int resultIndex = 2;
 
-        while (currentIndex < nums.length) {
-            if (nums[currentIndex] == nums[resultIndex - 1] &&
-                nums[currentIndex] == nums[resultIndex - 2]) {
-                // Skip any duplicates after the first
-                currentIndex++;
-            } else {
-                nums[resultIndex++] = nums[currentIndex++];
+        for (int currentIndex = 2; currentIndex < nums.length; currentIndex++) {
+            if (nums[currentIndex] != nums[resultIndex - 2]) {
+                nums[resultIndex++] = nums[currentIndex];
             }
         }
 
