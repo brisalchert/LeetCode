@@ -24,6 +24,8 @@
 
 package Problem2537;
 
+import java.util.HashMap;
+
 public class CountGoodSubarrays {
     public static void main(String[] args) {
         int[] nums = {3, 1, 4, 3, 2, 2, 4};
@@ -33,6 +35,44 @@ public class CountGoodSubarrays {
     }
 
     public static long countGood(int[] nums, int k) {
-        return 0L;
+        int l = 0, r = 1;
+        HashMap<Integer, Integer> countMap = new HashMap<>();
+        int totalPairs = 0;
+        long result = 0;
+
+        // Add the first element
+        countMap.put(nums[l], countMap.getOrDefault(nums[l], 0) + 1);
+
+        while (r < nums.length) {
+            // Move r to the right until there are at least k pairs
+            while (r < nums.length && totalPairs < k) {
+                countMap.put(nums[r], countMap.getOrDefault(nums[r], 0) + 1);
+                totalPairs += countMap.get(nums[r]) - 1;
+
+                if (totalPairs < k) {
+                    r++;
+                }
+            }
+
+            // Add current subarray and a subarray for each element to the right
+            result += (long) nums.length - r;
+
+            // Move l to the right until there are less than k pairs
+            while (totalPairs >= k) {
+                int currentCount = countMap.get(nums[l]);
+                countMap.put(nums[l], currentCount - 1);
+                totalPairs -= currentCount - 1;
+                l++;
+
+                if (totalPairs >= k) {
+                    result += (long) nums.length - r;
+                }
+            }
+
+            // Increment r to avoid counting the same subarray twice
+            r++;
+        }
+
+        return result;
     }
 }
