@@ -26,6 +26,9 @@
 
 package Problem2179;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CountGoodTriplets {
     public static void main(String[] args) {
         int[] nums1 = {4,0,1,3,2};
@@ -35,6 +38,71 @@ public class CountGoodTriplets {
     }
 
     public static long goodTriplets(int[] nums1, int[] nums2) {
-        return 0L;
+        int n = nums1.length;
+
+        // Create a map of values to indices in nums2
+        Map<Integer, Integer> pos2 = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            pos2.put(nums2[i], i);
+        }
+
+        // Map indices of values in nums1 to indices of values in nums2
+        int[] indexMap = new int[n];
+        for (int i = 0; i < n; i++) {
+            indexMap[i] = pos2.get(nums1[i]);
+        }
+
+        // Instantiate Binary Indexed Trees for left and right sides of indices in nums1
+        BIT bitLeft = new BIT(n);
+        BIT bitRight = new BIT(n);
+        int[] rightCount = new int[n];
+
+        // Count the number of elements after each index i that are also after indexMap[i]
+        for (int i = n - 1; i >= 0; i--) {
+            rightCount[i] = bitRight.query(n - 1) - bitRight.query(indexMap[i]);
+            bitRight.update(indexMap[i], 1); // Update the BIT
+        }
+
+        long result = 0;
+
+        // Count the number of elements before each index i that are also before indexMap[i]
+        // and calculate triplets for each
+        for (int i = 0; i < n; i++) {
+            int left = bitLeft.query(indexMap[i] - 1);
+            int right = rightCount[i];
+            result += (long) left * right;
+            bitLeft.update(indexMap[i], 1); // Update the BIT
+        }
+
+        return result;
+    }
+
+    static class BIT {
+        private final int[] tree;
+        private final int size;
+
+        public BIT(int size) {
+            this.size = size;
+            this.tree = new int[size + 2];
+        }
+
+        public void update(int index, int delta) {
+            index += 1; // Tree is 1-indexed
+            while (index <= size + 1) {
+                tree[index] += delta;
+                index += index & -index; // Move to next dependent element in the BIT
+            }
+        }
+
+        public int query(int index) {
+            int result = 0;
+            index += 1; // Tree is 1-indexed
+            while (index > 0) {
+                result += tree[index];
+                index -= index & -index; // Move to parent index in the BIT
+            }
+
+            return result;
+        }
     }
 }
