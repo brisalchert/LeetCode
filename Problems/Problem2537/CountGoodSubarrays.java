@@ -35,42 +35,21 @@ public class CountGoodSubarrays {
     }
 
     public static long countGood(int[] nums, int k) {
-        int l = 0, r = 1;
         HashMap<Integer, Integer> countMap = new HashMap<>();
-        int totalPairs = 0;
+        int left = 0;
         long result = 0;
 
-        // Add the first element
-        countMap.put(nums[l], countMap.getOrDefault(nums[l], 0) + 1);
-
-        while (r < nums.length) {
-            // Move r to the right until there are at least k pairs
-            while (r < nums.length && totalPairs < k) {
-                countMap.put(nums[r], countMap.getOrDefault(nums[r], 0) + 1);
-                totalPairs += countMap.get(nums[r]) - 1;
-
-                if (totalPairs < k) {
-                    r++;
-                }
+        for (int right = 0; right < nums.length; right++) {
+            // Account for new pairs with the current element
+            k -= countMap.getOrDefault(nums[right], 0);
+            countMap.put(nums[right], countMap.getOrDefault(nums[right], 0) + 1);
+            // Move the left pointer while there are at least k pairs
+            while (k <= 0) {
+                countMap.put(nums[left], countMap.get(nums[left]) - 1);
+                k += countMap.get(nums[left++]);
             }
-
-            // Add current subarray and a subarray for each element to the right
-            result += (long) nums.length - r;
-
-            // Move l to the right until there are less than k pairs
-            while (totalPairs >= k) {
-                int currentCount = countMap.get(nums[l]);
-                countMap.put(nums[l], currentCount - 1);
-                totalPairs -= currentCount - 1;
-                l++;
-
-                if (totalPairs >= k) {
-                    result += (long) nums.length - r;
-                }
-            }
-
-            // Increment r to avoid counting the same subarray twice
-            r++;
+            // Add good subarrays starting from [0, left - 1] and ending at right
+            result += left;
         }
 
         return result;
