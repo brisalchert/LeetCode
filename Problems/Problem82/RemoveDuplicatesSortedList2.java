@@ -53,27 +53,21 @@ public class RemoveDuplicatesSortedList2 {
         ListNode dummy = new ListNode(0, head);
         ListNode previous = dummy;
         ListNode current = head;
-        ListNode next = current.next;
 
-        while (next != null) {
-            if (current.val == next.val) {
-                while (next != null && next.val == current.val) {
-                    current = next;
-                    next = current.next;
+        while (current != null) {
+            if (current.next != null && current.val == current.next.val) {
+                while (current.next != null && current.next.val == current.val) {
+                    current = current.next;
                 }
 
-                if (next == null) {
-                    previous.next = null;
-                } else {
-                    previous.next = next;
-                    current = next;
-                    next = next.next;
-                }
+                // Unlink all duplicate values
+                previous.next = current.next;
             } else {
+                // Advance previous pointer when nodes are not duplicates
                 previous = current;
-                current = next;
-                next = current.next;
             }
+
+            current = current.next;
         }
 
         return dummy.next;
