@@ -23,6 +23,43 @@ public class LargestRectangleHistogram {
     }
 
     public static int largestRectangleArea(int[] heights) {
-        return 0;
+        int[] firstSmallerOnLeft = new int[heights.length];
+        int[] firstSmallerOnRight = new int[heights.length];
+        int result = 0;
+
+        // Set first smaller indices for bars on the edge
+        firstSmallerOnLeft[0] = -1;
+        firstSmallerOnRight[heights.length - 1] = heights.length;
+
+        // Calculate indices of each bar's first smaller bar on the left
+        for (int i = 1; i < heights.length; i++) {
+            int currentOnLeft = i - 1;
+
+            // Reuse previous values to avoid redundant calculations
+            while (currentOnLeft >= 0 && heights[currentOnLeft] >= heights[i]) {
+                currentOnLeft = firstSmallerOnLeft[currentOnLeft];
+            }
+
+            firstSmallerOnLeft[i] = currentOnLeft;
+        }
+
+        // Calculate indices of each bar's first smaller bar on the right
+        for (int i = heights.length - 2; i >= 0; i--) {
+            int currentOnRight = i + 1;
+
+            // Reuse previous values to avoid redundant calculations
+            while (currentOnRight < heights.length && heights[currentOnRight] >= heights[i]) {
+                currentOnRight = firstSmallerOnRight[currentOnRight];
+            }
+
+            firstSmallerOnRight[i] = currentOnRight;
+        }
+
+        // Calculate the area of each rectangle
+        for (int i = 0; i < heights.length; i++) {
+            result = Math.max(result, heights[i] * (firstSmallerOnRight[i] - firstSmallerOnLeft[i] - 1));
+        }
+
+        return result;
     }
 }
