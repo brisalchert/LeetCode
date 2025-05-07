@@ -37,7 +37,10 @@ public class MinimumTimeLastRoom {
     }
 
     public static int minTimeToReach(int[][] moveTime) {
-        int[][] times = new int[moveTime.length][moveTime[0].length];
+        int n = moveTime.length;
+        int m = moveTime[0].length;
+
+        int[][] times = new int[n][m];
         int[][] directions = {{-1,0},{0,1},{1,0},{0,-1}};
         PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
 
@@ -50,26 +53,33 @@ public class MinimumTimeLastRoom {
 
         while (!pq.isEmpty()) {
             int[] current = pq.poll();
+            int time = current[0];
             int i = current[1];
             int j = current[2];
 
+            if (i == n - 1 && j == m - 1) {
+                return time;
+            }
+
+            // Traverse each direction
             for (int[] direction : directions) {
                 int x = i + direction[0];
                 int y = j + direction[1];
 
-                // Ensure cell is valid
                 if ((x >= 0 && x < moveTime.length) && (y >= 0 && y < moveTime[0].length)) {
-                    // Check for a new quickest path
-                    if (Math.max(times[i][j] + 1, moveTime[x][y] + 1) < times[x][y]) {
-                        times[x][y] = Math.max(times[i][j] + 1, moveTime[x][y] + 1);
+                    // Calculate new move time to the next cell
+                    int nextTime = Math.max(time, moveTime[x][y]) + 1;
 
-                        // Add new cell to the priority queue
-                        pq.offer(new int[] {times[x][y], x, y});
+                    // Update quickest path to this cell
+                    if (nextTime < times[x][y]) {
+                        times[x][y] = nextTime;
+                        pq.offer(new int[] {nextTime, x, y});
                     }
                 }
             }
         }
 
-        return times[moveTime.length - 1][moveTime[0].length - 1];
+        // End never reached
+        return -1;
     }
 }
