@@ -22,6 +22,10 @@
 
 package Problem3341;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
 public class MinimumTimeLastRoom {
     public static void main(String[] args) {
         int[][] moveTime = {
@@ -33,6 +37,39 @@ public class MinimumTimeLastRoom {
     }
 
     public static int minTimeToReach(int[][] moveTime) {
-        return 0;
+        int[][] times = new int[moveTime.length][moveTime[0].length];
+        int[][] directions = {{-1,0},{0,1},{1,0},{0,-1}};
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+
+        for (int[] row : times) {
+            Arrays.fill(row, Integer.MAX_VALUE);
+        }
+        times[0][0] = 0;
+
+        pq.offer(new int[] {0,0,0});
+
+        while (!pq.isEmpty()) {
+            int[] current = pq.poll();
+            int i = current[1];
+            int j = current[2];
+
+            for (int[] direction : directions) {
+                int x = i + direction[0];
+                int y = j + direction[1];
+
+                // Ensure cell is valid
+                if ((x >= 0 && x < moveTime.length) && (y >= 0 && y < moveTime[0].length)) {
+                    // Check for a new quickest path
+                    if (Math.max(times[i][j] + 1, moveTime[x][y] + 1) < times[x][y]) {
+                        times[x][y] = Math.max(times[i][j] + 1, moveTime[x][y] + 1);
+
+                        // Add new cell to the priority queue
+                        pq.offer(new int[] {times[x][y], x, y});
+                    }
+                }
+            }
+        }
+
+        return times[moveTime.length - 1][moveTime[0].length - 1];
     }
 }
