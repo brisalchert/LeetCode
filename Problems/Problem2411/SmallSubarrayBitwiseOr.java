@@ -51,31 +51,19 @@ public class SmallSubarrayBitwiseOr {
         int n = nums.length;
         int[] res = new int[n];
 
-        int[] positions = new int[31];
-        Arrays.fill(positions, -1);
+        // Traverse the array, updating previous subarray lengths as the bitwise OR accumulates
+        for (int i = 0; i < n; i++) {
+            int current = nums[i];
+            res[i] = 1;
 
-        // Traverse nums in reverse, recording the most recent index of each significant bit
-        for (int i = n - 1; i >= 0; i--) {
-            int j = i;
-
-            for (int bit = 0; bit < 31; bit++) {
-                if ((nums[i] & (1 << bit)) == 0) {
-                    // If the bit is not present in nums[i],
-                    // check for its most recent position
-                    if (positions[bit] != -1) {
-                        // Since there is a previous instance of the bit,
-                        // set the minimum right boundary to that position
-                        j = Math.max(j, positions[bit]);
-                    }
-                } else {
-                    // Since the bit is present in nums[i],
-                    // record this index as the most recent position
-                    positions[bit] = i;
-                }
+            int j = i - 1;
+            while (j >= 0 && ((nums[j] | current) != nums[j])) {
+                // Since the current value updates the previous bitwise OR value,
+                // update the subarray length for the previous index
+                res[j] = i - j + 1;
+                nums[j] |= current;
+                j--;
             }
-
-            // Record length of subarray
-            res[i] = j - i + 1;
         }
 
         return res;
